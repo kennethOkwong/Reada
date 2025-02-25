@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "507718413779",
+    "project_id": "reada-2429a",
+    "storage_bucket": "reada-2429a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507718413779:android:f6ef2c01169cadda80d326",
+        "android_client_info": {
+          "package_name": "com.example.reada"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALOT0Mn87_uV0sQz_R1AH6gMWDgVkXRbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
