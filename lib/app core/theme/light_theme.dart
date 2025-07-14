@@ -13,13 +13,13 @@ final lightThemeData = ThemeData(
 
 //light theme color scheme
 final lightColorScheme = ColorScheme.fromSeed(
-  seedColor: AppColors.primary,
+  seedColor: AppColors.primaryBlue,
 );
 
 FilledButtonThemeData get filledButtonLightTheme {
   return FilledButtonThemeData(
       style: FilledButton.styleFrom(
-    backgroundColor: AppColors.primary,
+    backgroundColor: AppColors.primaryBlue,
     foregroundColor: lightColorScheme.onPrimary,
   ));
 }
@@ -27,8 +27,8 @@ FilledButtonThemeData get filledButtonLightTheme {
 OutlinedButtonThemeData get outlinedButtonLightTheme {
   return OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
-      foregroundColor: AppColors.primary,
-      side: const BorderSide(color: AppColors.primary),
+      foregroundColor: AppColors.primaryBlue,
+      side: const BorderSide(color: AppColors.primaryBlue),
     ),
   );
 }

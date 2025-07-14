@@ -176,7 +176,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
                     controller: widget.controller,
                     obscureText: obscureText,
                     initialValue: widget.initialText,
-                    cursorColor: AppColors.primary,
+                    cursorColor: AppColors.primaryBlue,
                     validator: (val) {
                       final response = widget.validator?.call(val);
                       hasError = response?.$1 ?? false;
@@ -259,7 +259,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
                         borderRadius: BorderRadius.all(
                           Radius.circular(8),
                         ),
-                        borderSide: BorderSide(color: AppColors.primary),
+                        borderSide: BorderSide(color: AppColors.primaryBlue),
                       ),
                     ),
                   ),

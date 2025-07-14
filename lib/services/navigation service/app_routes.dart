@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reada/features/authentication/presentation/forgot%20password/enter_code_view.dart';
+import 'package:reada/features/authentication/presentation/verify%20code/enter_code_view.dart';
 import 'package:reada/features/authentication/presentation/forgot%20password/enter_email_view.dart';
 import 'package:reada/features/authentication/presentation/forgot%20password/reset_password_view.dart';
 import 'package:reada/features/authentication/presentation/login%20screen/login_view.dart';

@@ -18,6 +18,11 @@ class NavigationService {
     );
   }
 
+  void popUntilRoute(String routeName) {
+    navigatorKey.currentState!
+        .popUntil((route) => route.settings.name == routeName);
+  }
+
   Future<dynamic> navigateToAndRemoveUntil(String routeName,
       {dynamic argument}) {
     return navigatorKey.currentState!.pushNamedAndRemoveUntil(
@@ -27,7 +32,7 @@ class NavigationService {
     );
   }
 
-  void goBack() {
-    return navigatorKey.currentState!.pop();
+  void goBack<T>([T? result]) {
+    return navigatorKey.currentState!.pop<T>(result);
   }
 }

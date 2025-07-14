@@ -3,6 +3,7 @@ import 'package:reada/features/authentication/presentation/forgot%20password/for
 import 'package:reada/features/authentication/presentation/landing%20screen/landing_screen_viewmodel.dart';
 import 'package:reada/features/authentication/presentation/login%20screen/login_viewmodel.dart';
 import 'package:reada/features/authentication/presentation/register%20screen/register_viewmodel.dart';
+import 'package:reada/features/authentication/presentation/verify%20code/verify_code_viewmodel.dart';
 import 'package:reada/services/navigation%20service/navigation_service.dart';
 
 final locator = GetIt.instance;
@@ -25,7 +26,8 @@ Future<void> _registerViewmodels() async {
     ..registerFactory<LandingScreenViewmodel>(LandingScreenViewmodel.new)
     ..registerFactory<LoginViewmodel>(LoginViewmodel.new)
     ..registerFactory<RegisterViewmodel>(RegisterViewmodel.new)
-    ..registerFactory<ForgotPasswordViewmodel>(ForgotPasswordViewmodel.new);
+    ..registerFactory<ForgotPasswordViewmodel>(ForgotPasswordViewmodel.new)
+    ..registerFactory<VerifyCodeViewmodel>(VerifyCodeViewmodel.new);
 }
 
 // Future<void> _registerExternalDependencies(AppFlavorConfig config) async {

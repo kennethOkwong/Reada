@@ -38,7 +38,9 @@ class ResetPasswordView extends StatelessWidget {
                         child: PrimaryButton(
                           title: 'Reset password',
                           borderRadius: 24,
-                          onPressed: () {},
+                          onPressed: () {
+                            model.resetPassword();
+                          },
                         ),
                       ),
                     ],

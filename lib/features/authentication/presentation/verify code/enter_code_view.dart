@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:reada/app%20core/base/base_ui.dart';
-import 'package:reada/features/authentication/presentation/forgot%20password/forgot_password_viewmodel.dart';
+import 'package:reada/features/authentication/presentation/verify%20code/verify_code_viewmodel.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
-import 'package:reada/shared/text%20fields/custom_text_field.dart';
+import 'package:reada/shared/text%20fields/pin_input_field.dart';
 
 class EnterCodeView extends StatelessWidget {
   const EnterCodeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<ForgotPasswordViewmodel>(
+    return BaseView<VerifyCodeViewmodel>(
       builder: (context, model, child) {
         return Scaffold(
           appBar: AppBar(),
@@ -23,12 +23,13 @@ class EnterCodeView extends StatelessWidget {
                 children: [
                   // context.vSpacing32,
                   Text(
-                    'Enter verification code',
+                    'Enter verification code sent to\nokwongkenneth36@gmail.com',
                     style: context.textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
                   ),
-                  context.vSpacing16,
-                  const PrimaryTextField(
-                    hintText: 'Email',
+                  context.vSpacing20,
+                  PinInputField(
+                    onCompleted: (pin) {},
                   ),
                   context.vSpacing32,
                   Row(
@@ -38,7 +39,7 @@ class EnterCodeView extends StatelessWidget {
                           title: 'Submit',
                           borderRadius: 24,
                           onPressed: () {
-                            model.navigateToResetPassword();
+                            model.verifyCode();
                           },
                         ),
                       ),
@@ -47,9 +48,9 @@ class EnterCodeView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Did not receive code?'),
+                      const Text('Did not receive code? 0:23'),
                       TextButton(
-                        child: const Text('Resend'),
+                        child: const Text('Resend '),
                         onPressed: () {
                           // model.navigateToSignUp();
                         },

@@ -37,7 +37,7 @@ class EnterEmailView extends StatelessWidget {
                           title: 'Continue',
                           borderRadius: 24,
                           onPressed: () {
-                            model.navigateToEnterCode();
+                            model.navigateToVerifyCode();
                           },
                         ),
                       ),

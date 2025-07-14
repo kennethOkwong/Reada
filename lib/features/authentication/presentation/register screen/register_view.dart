@@ -56,7 +56,7 @@ class RegisterView extends StatelessWidget {
                         child: PrimaryButton(
                           title: 'Sign up',
                           borderRadius: 24,
-                          onPressed: () {},
+                          onPressed: model.navigateToVerifyCode,
                         ),
                       ),
                     ],
