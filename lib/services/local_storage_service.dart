@@ -1,5 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:reada/app%20core/locator.dart';
+import 'package:reada/app/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageKeys {

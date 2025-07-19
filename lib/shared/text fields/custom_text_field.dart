@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:reada/app%20core/theme/colors.dart';
+import 'package:reada/app/theme/colors.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
 
 /// The [PrimaryTextField] is a versatile and customizable Flutter widget that simplifies

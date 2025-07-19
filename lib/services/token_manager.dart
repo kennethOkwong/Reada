@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:reada/app%20core/locator.dart';
+import 'package:reada/app/locator.dart';
 import 'package:reada/services/api%20service/api.dart';
 import 'package:reada/services/api%20service/api_response.dart';
 

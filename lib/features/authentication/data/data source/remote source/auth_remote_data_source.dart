@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:get_it/get_it.dart';
-import 'package:reada/app%20core/locator.dart';
+import 'package:reada/app/locator.dart';
 import 'package:reada/services/api%20service/api.dart';
 import 'package:reada/services/api%20service/api_response.dart';
 import 'package:reada/services/api%20service/url_path.dart';

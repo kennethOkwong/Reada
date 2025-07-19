@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reada/app%20core/base/base_ui.dart';
+import 'package:reada/app/base/base_ui.dart';
 import 'package:reada/features/authentication/presentation/register%20screen/register_viewmodel.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';

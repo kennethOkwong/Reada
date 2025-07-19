@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reada/app%20core/base/base_ui.dart';
+import 'package:reada/app/base/base_ui.dart';
 import 'package:reada/features/authentication/presentation/login%20screen/login_viewmodel.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
@@ -56,7 +56,7 @@ class LoginView extends StatelessWidget {
                         child: PrimaryButton(
                           title: 'Login',
                           borderRadius: 24,
-                          onPressed: () {},
+                          onPressed: model.login,
                         ),
                       ),
                     ],
