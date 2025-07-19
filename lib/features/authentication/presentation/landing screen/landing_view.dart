@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:reada/app%20core/base/base_ui.dart';
+import 'package:reada/app/base/base_ui.dart';
 import 'package:reada/features/authentication/presentation/landing%20screen/landing_screen_viewmodel.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
-import 'package:reada/shared/images.dart';
+import 'package:reada/shared/app%20images/images.dart';
 
 class LandingView extends StatelessWidget {
   const LandingView({super.key});

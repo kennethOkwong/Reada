@@ -1,4 +1,4 @@
-import 'package:reada/app%20core/base/base_vm.dart';
+import 'package:reada/app/base/base_vm.dart';
 import 'package:reada/shared/constants.dart';
 
 class VerifyCodeViewmodel extends BaseViewModel {

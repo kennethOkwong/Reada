@@ -1,0 +1,41 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Reada(dev)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/app/src/main_development.dart",
+            "toolArgs": [
+                "--dart-define-from-file",
+                ".env",
+            ],
+            "args": [
+                "--flavor",
+                "dev",
+                "--target",
+                "lib/app/src/main_development.dart",
+            ]
+        },
+        {
+            "name": "Reada(prod)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/app/src/main_production.dart",
+            "toolArgs": [
+                "--dart-define-from-file",
+                ".env",
+            ],
+            "args": [
+                "--flavor",
+                "prod",
+                "--target",
+                "lib/app/src/main_production.dart",
+                // "--verbose"
+            ]
+        },
+    ]
+}

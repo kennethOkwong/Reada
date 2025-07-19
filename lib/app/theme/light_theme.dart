@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reada/app%20core/theme/colors.dart';
+import 'package:reada/app/theme/colors.dart';
 
 //app general theme data
 final lightThemeData = ThemeData(

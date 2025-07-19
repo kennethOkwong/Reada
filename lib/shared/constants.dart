@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reada/app%20core/locator.dart';
+import 'package:reada/app/locator.dart';
 import 'package:reada/services/navigation%20service/navigation_service.dart';
 
 class Constants {

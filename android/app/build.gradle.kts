@@ -37,6 +37,20 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    flavorDimensions += "Reada"
+    productFlavors {
+        create("dev") {
+            dimension = "Reada"
+            versionNameSuffix = ".dev"
+            resValue("string", "app_name", "Reada Dev")
+        }
+        create("prod") {
+            dimension = "Reada"
+            versionNameSuffix = ""
+            resValue("string", "app_name", "Reada")
+        }
+    }
 }
 
 flutter {

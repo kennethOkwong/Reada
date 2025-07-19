@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-import 'package:reada/app%20core/theme/colors.dart';
+import 'package:reada/app/theme/colors.dart';
 
 class PinInputField extends StatelessWidget {
   const PinInputField({

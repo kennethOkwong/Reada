@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:reada/app%20core/flavour/flavor_config.dart';
-import 'package:reada/app%20core/locator.dart';
+import 'package:reada/app/flavour/flavor_config.dart';
+import 'package:reada/app/locator.dart';
 import 'package:reada/services/api%20service/api_response.dart';
 import 'package:reada/services/app_logger.dart';
 import 'package:reada/services/local_storage_service.dart';
