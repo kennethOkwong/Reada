@@ -1,9 +1,4 @@
-enum ApiStatus {
-  success,
-  failure,
-}
-
-class ApiResponse {
+class ApiResponse<T> {
   ApiResponse({
     required this.isSuccessful,
     this.code,
@@ -11,7 +6,6 @@ class ApiResponse {
     this.others,
     this.isTimeout,
     this.message,
-    this.token,
     this.errorType,
     this.errorCode,
     this.type,
@@ -19,21 +13,11 @@ class ApiResponse {
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
     return ApiResponse(
-      message: json['message'] ??
-          // ApiErrorHandling.getErrorMessage(
-          //   json['code'],
-          json['error'],
-      // )
-      // ,
+      message: json['message'],
       errorType: json['type'],
       errorCode: json['code'],
-      isSuccessful: json['success'] ?? false,
-      data: json['data'] != null
-          ? (json['data'] is bool && json['data'] != false)
-              ? json['data']
-              : null
-          : json['results'],
-      token: json['token'],
+      isSuccessful: json['status'] ?? false,
+      data: json['data'] as T?,
     );
   }
   factory ApiResponse.timout() {
@@ -42,16 +26,16 @@ class ApiResponse {
       others: 'timeout',
       isTimeout: true,
       message: 'Error occured. Please try again later',
+      data: null,
     );
   }
   dynamic code;
-  dynamic data;
+  T? data;
   dynamic others;
   bool isSuccessful;
   final bool? isTimeout;
   final String? message;
   final String? errorType;
   final String? errorCode;
-  final String? token;
   final String? type;
 }

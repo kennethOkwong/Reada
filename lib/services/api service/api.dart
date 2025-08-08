@@ -92,15 +92,16 @@ class Api {
         isSuccessful: false,
         message: 'There was a problem connecting to the server',
       );
-    } on Exception catch (e) {
-      log.e('Error: $e');
+    } on Exception catch (e, s) {
+      log.e('Error: $e', stackTrace: s);
 
       return ApiResponse(
         isSuccessful: false,
         message: 'Something went wrong',
       );
-    } catch (e) {
+    } catch (e, s) {
       debugPrint('$e');
+      log.e('Error: $e', stackTrace: s);
 
       return ApiResponse(
         isSuccessful: false,
@@ -185,52 +186,22 @@ class Api {
         isSuccessful: false,
         message: 'There was a problem connecting to the server',
       );
-    } on Exception catch (e) {
-      log.e('Error: $e');
+    } on Exception catch (e, s) {
+      log.e('Error: $e', stackTrace: s);
 
       return ApiResponse(
         isSuccessful: false,
         message: 'Something went wrong',
       );
-    } catch (e) {
+    } catch (e, s) {
       debugPrint('$e');
+      log.e('Error: $e', stackTrace: s);
 
       return ApiResponse(
         isSuccessful: false,
         message: 'Something went wrong',
       );
     }
-  }
-
-  Future<void> _addFiles(File fileList, dynamic body, dynamic request) async {
-    // for (int i = 0; i < fileList.length; i++) {
-    final file = fileList;
-    final filename = file.path.split('/').last;
-    final fileStream = ByteStream(file.openRead());
-    final fileLength = await file.length();
-    MultipartFile multipartFile;
-
-    if (body != null) {
-      multipartFile = MultipartFile(
-        'file_attachments[$file]file',
-        fileStream,
-        fileLength,
-        filename: filename,
-      );
-      request.fields.addAll(
-        {'file_attachments[$file]attachment_type': 'png'},
-      );
-      request.fields.addAll(body);
-    } else {
-      multipartFile = MultipartFile(
-        'file',
-        fileStream,
-        fileLength,
-        filename: filename,
-      );
-    }
-    request.files.add(multipartFile);
-    // }
   }
 
   Future<ApiResponse> patchData(

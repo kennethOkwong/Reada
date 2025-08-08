@@ -1,12 +1,21 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-class BaseViewModel extends ChangeNotifier {
+import 'package:flutter/material.dart';
+import 'package:reada/app/locator.dart';
+import 'package:reada/features/authentication/domain/repository/auth_repository.dart';
+
+class BaseViewModel<E> extends ChangeNotifier {
   String errorMessage = '';
   String loadingText = '';
   bool isLoading = false;
-  // LocalStorageService storageService = getIt<LocalStorageService>();
-  // AuthRepository userRepository = getIt<AuthRepository>();
-  // UserLocalStorage userServices = getIt<UserLocalStorage>();
+  AuthRepository authRepository = locator<AuthRepository>();
+
+  final StreamController<E> _eventController = StreamController<E>.broadcast();
+  Stream<E> get eventStream => _eventController.stream;
+
+  void emitEvent(E event) {
+    _eventController.add(event);
+  }
 
   void setErrorMessage(String error) {
     errorMessage = error;
@@ -28,7 +37,7 @@ class BaseViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void startLoader(String? text) {
+  void startLoader([String? text]) {
     if (!isLoading) {
       isLoading = true;
       setLoadingText(text ?? '');

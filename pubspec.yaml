@@ -1,7 +1,7 @@
 name: reada
 description: "Reada mobile application"
 publish_to: 'none' 
-version: 1.0.2+2
+version: 1.0.4+4
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -12,7 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   get_it: ^8.0.3
   http: ^1.3.0
-  logger: ^2.5.0
+  logger: ^2.6.0
   flutter_secure_storage: ^9.2.4
   shared_preferences: ^2.3.3
   provider: ^6.1.2
@@ -20,6 +20,8 @@ dependencies:
   pinput: ^5.0.1
   toastification: ^3.0.3
   flutter_svg: ^2.2.0
+  equatable: ^2.0.7
+  intl_phone_field: ^3.2.0
 
 dev_dependencies:
   flutter_test:

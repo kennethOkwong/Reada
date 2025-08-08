@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:reada/features/authentication/domain/entities/send_code_data_model.dart';
 import 'package:reada/features/authentication/presentation/verify%20code/enter_code_view.dart';
 import 'package:reada/features/authentication/presentation/forgot%20password/enter_email_view.dart';
 import 'package:reada/features/authentication/presentation/forgot%20password/reset_password_view.dart';
-import 'package:reada/features/authentication/presentation/login%20screen/login_view.dart';
-import 'package:reada/features/authentication/presentation/register%20screen/register_view.dart';
+import 'package:reada/features/authentication/presentation/login_view/login_view.dart';
+import 'package:reada/features/authentication/presentation/register_view/register_view.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_view.dart';
 
 class AppRoutes {
@@ -24,27 +25,31 @@ class AppRouter {
     switch (settings.name) {
       case AppRoutes.login:
         return CupertinoPageRoute(
-          builder: (context) => const LoginView(),
+          builder: (context) => LoginView(),
           settings: settings,
         );
       case AppRoutes.signUp:
         return CupertinoPageRoute(
-          builder: (context) => const RegisterView(),
+          builder: (context) => RegisterView(),
           settings: settings,
         );
       case AppRoutes.enterEmail:
         return CupertinoPageRoute(
-          builder: (context) => const EnterEmailView(),
+          builder: (context) => EnterEmailView(),
           settings: settings,
         );
       case AppRoutes.enterCode:
         return CupertinoPageRoute(
-          builder: (context) => const EnterCodeView(),
+          builder: (context) => EnterCodeView(
+            codeModel: settings.arguments as SendCodeDataModel,
+          ),
           settings: settings,
         );
       case AppRoutes.resetPassword:
         return CupertinoPageRoute(
-          builder: (context) => const ResetPasswordView(),
+          builder: (context) => ResetPasswordView(
+            email: settings.arguments as String,
+          ),
           settings: settings,
         );
       case AppRoutes.dashboard:

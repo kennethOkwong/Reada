@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:reada/app/base/base_ui.dart';
 import 'package:reada/app/theme/colors.dart';
 import 'package:reada/features/dashboard/domain/models/bottom_nav_model.dart';
+import 'package:reada/features/dashboard/presentation/dashboard_event.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_viewmodel.dart';
 import 'package:reada/shared/app%20images/svg_icons.dart';
 
@@ -11,7 +12,7 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<DashboardViewmodel>(
+    return BaseView<DashboardViewmodel, DashboardEvent>(
       builder: (context, model, child) {
         return PopScope(
           canPop: model.currentIndex == 0,

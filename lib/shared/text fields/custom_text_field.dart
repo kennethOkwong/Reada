@@ -61,7 +61,7 @@ class PrimaryTextField extends StatefulWidget {
     this.hintText,
     this.controller,
     this.obscureText = false,
-    this.autoValidate = false,
+    this.autoValidate = true,
     this.isPassword = false,
     this.validator,
     // this.validatorRecord,
@@ -106,7 +106,7 @@ class PrimaryTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final List<TextInputFormatter>? inputFormatters;
   // final String? Function(String?)? validator;
-  final (bool, String?)? Function(String?)? validator;
+  final String? Function(String?)? validator;
   final void Function(String?)? onChanged;
   final void Function()? onEditingComplete;
   final void Function(String?)? onSubmitted;
@@ -162,7 +162,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
             Expanded(
               child: Theme(
                 data: ThemeData(
-                  disabledColor: Colors.grey.shade300,
+                  disabledColor: AppColors.grey300,
                 ),
                 child: Container(
                   color: !widget.enabled
@@ -177,11 +177,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
                     obscureText: obscureText,
                     initialValue: widget.initialText,
                     cursorColor: AppColors.primaryBlue,
-                    validator: (val) {
-                      final response = widget.validator?.call(val);
-                      hasError = response?.$1 ?? false;
-                      return response?.$2;
-                    },
+                    validator: widget.validator,
                     inputFormatters: widget.inputFormatters,
                     enabled: widget.enabled,
                     onChanged: (val) {
@@ -196,8 +192,8 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
                     cursorHeight: 20,
                     style: context.textTheme.labelMedium?.copyWith(
                       color: widget.enabled
-                          ? Colors.grey.shade900
-                          : Colors.grey.shade500,
+                          ? AppColors.grey900
+                          : AppColors.grey500,
                     ),
                     decoration: InputDecoration(
                       constraints: const BoxConstraints(
