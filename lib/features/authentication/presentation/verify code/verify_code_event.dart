@@ -1,4 +1,11 @@
-enum VerifyCodeEventType { idle, loading, failure, success }
+enum VerifyCodeEventType {
+  idle,
+  loading,
+  verifyFailure,
+  verifySuccess,
+  resendFailure,
+  resendSuccess
+}
 
 class VerifyCodeEvent {
   final VerifyCodeEventType type;
@@ -9,7 +16,12 @@ class VerifyCodeEvent {
   const VerifyCodeEvent.idle() : this._(VerifyCodeEventType.idle);
   const VerifyCodeEvent.loading([String? msg])
       : this._(VerifyCodeEventType.loading, message: msg);
-  const VerifyCodeEvent.success() : this._(VerifyCodeEventType.success);
-  const VerifyCodeEvent.failure([String? msg])
-      : this._(VerifyCodeEventType.failure, message: msg);
+  const VerifyCodeEvent.verifySuccess()
+      : this._(VerifyCodeEventType.verifySuccess);
+  const VerifyCodeEvent.verifyFailure(String msg)
+      : this._(VerifyCodeEventType.verifyFailure, message: msg);
+  const VerifyCodeEvent.resendSuccess()
+      : this._(VerifyCodeEventType.resendSuccess);
+  const VerifyCodeEvent.resendFailure(String msg)
+      : this._(VerifyCodeEventType.resendFailure, message: msg);
 }

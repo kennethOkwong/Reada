@@ -1,12 +1,14 @@
-// import 'package:reada/features/authentication/domain/entities/login_data_model.dart';
-// import 'package:reada/features/authentication/domain/repository/auth_repository.dart';
+import 'package:reada/app/result.dart';
+import 'package:reada/features/authentication/data/dtos/login_request_dto.dart';
+import 'package:reada/features/authentication/domain/entities/user.dart';
+import 'package:reada/features/authentication/domain/repository/auth_repository.dart';
 
-// class LoginUseCase {
-//   final AuthRepository repository;
+class LoginUseCase {
+  final AuthRepository repository;
 
-//   LoginUseCase(this.repository);
+  LoginUseCase(this.repository);
 
-//   Future<User> call(LoginDataModel data) async {
-//     return await repository.login(data: data);
-//   }
-// }
+  Future<Result<User>> call(LoginRequestDto data) async {
+    return await repository.login(data: data);
+  }
+}

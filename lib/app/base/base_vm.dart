@@ -1,14 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:reada/app/locator.dart';
-import 'package:reada/features/authentication/domain/repository/auth_repository.dart';
 
 class BaseViewModel<E> extends ChangeNotifier {
   String errorMessage = '';
   String loadingText = '';
   bool isLoading = false;
-  AuthRepository authRepository = locator<AuthRepository>();
 
   final StreamController<E> _eventController = StreamController<E>.broadcast();
   Stream<E> get eventStream => _eventController.stream;

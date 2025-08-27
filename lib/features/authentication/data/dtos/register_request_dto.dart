@@ -1,4 +1,8 @@
-class RegisterUserDataModel {
+import 'package:reada/features/authentication/data/dtos/send_code_request_dto.dart';
+import 'package:reada/shared/enums/user_type_enum.dart';
+import 'package:reada/shared/enums/verification_type_enum.dart';
+
+class RegisterRequestDto {
   final String? firstName;
   final String? lastName;
   final String? email;
@@ -6,7 +10,7 @@ class RegisterUserDataModel {
   final String? password;
   final String? confirmPassword;
 
-  RegisterUserDataModel({
+  RegisterRequestDto({
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -15,8 +19,8 @@ class RegisterUserDataModel {
     required this.confirmPassword,
   });
 
-  factory RegisterUserDataModel.empty() {
-    return RegisterUserDataModel(
+  factory RegisterRequestDto.empty() {
+    return RegisterRequestDto(
       firstName: null,
       lastName: null,
       email: null,
@@ -26,7 +30,7 @@ class RegisterUserDataModel {
     );
   }
 
-  RegisterUserDataModel copyWith({
+  RegisterRequestDto copyWith({
     String? firstName,
     String? lastName,
     String? email,
@@ -34,7 +38,7 @@ class RegisterUserDataModel {
     String? password,
     String? confirmPassword,
   }) {
-    return RegisterUserDataModel(
+    return RegisterRequestDto(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
@@ -51,7 +55,14 @@ class RegisterUserDataModel {
       "email": email,
       "phone_number": phone,
       "password": password,
-      "user_type": 'vendor',
+      "user_type": UserType.vendor.name,
     };
+  }
+
+  SendCodeRequestDto toSendCodeDto() {
+    return SendCodeRequestDto(
+      email: email,
+      codeType: CodeType.userVerification.readableName,
+    );
   }
 }

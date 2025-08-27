@@ -4,7 +4,7 @@ import 'package:reada/features/authentication/data/data_source/remote_source/aut
 import 'package:reada/features/authentication/data/repository_impl/auth_repository_impl.dart';
 import 'package:reada/features/authentication/domain/repository/auth_repository.dart';
 import 'package:reada/features/authentication/presentation/forgot%20password/forgot_password_viewmodel.dart';
-import 'package:reada/features/authentication/presentation/landing_view/landing_view_viewmodel.dart';
+import 'package:reada/features/onboarding/landing_view/landing_view_viewmodel.dart';
 import 'package:reada/features/authentication/presentation/login_view/login_viewmodel.dart';
 import 'package:reada/features/authentication/presentation/register_view/register_viewmodel.dart';
 import 'package:reada/features/authentication/presentation/verify%20code/verify_code_viewmodel.dart';

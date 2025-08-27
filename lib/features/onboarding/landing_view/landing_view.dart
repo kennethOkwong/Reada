@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:reada/app/base/base_ui.dart';
-import 'package:reada/features/authentication/presentation/landing_view/landing_view_viewmodel.dart';
-import 'package:reada/features/authentication/presentation/landing_view/landing_events.dart';
+import 'package:reada/features/onboarding/landing_view/landing_view_viewmodel.dart';
+import 'package:reada/features/onboarding/landing_view/landing_events.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
+import 'package:reada/services/services.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
@@ -19,7 +20,7 @@ class LandingView extends StatelessWidget {
         return SafeArea(
           child: Scaffold(
               body: Padding(
-            padding: Constants.pagePadding,
+            padding: Constants.pagePadding(context),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -51,18 +52,18 @@ class LandingView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      PrimaryButton(
+                      ReadaButton.filled(
                         title: 'Sign up',
                         onPressed: () {
-                          Constants.navigationService
-                              .navigateTo(AppRoutes.signUp);
+                          Services.navigationService
+                              .navigateTo(AppRoutes.businessProfile);
                         },
                       ),
                       context.hSpacing24,
-                      PrimaryButton.outlined(
+                      ReadaButton.outlined(
                         title: 'Login',
                         onPressed: () {
-                          Constants.navigationService
+                          Services.navigationService
                               .navigateTo(AppRoutes.login);
                         },
                       ),

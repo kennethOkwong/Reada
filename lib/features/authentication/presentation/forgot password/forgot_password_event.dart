@@ -1,4 +1,4 @@
-import 'package:reada/features/authentication/domain/entities/send_code_data_model.dart';
+import 'package:reada/features/authentication/data/dtos/send_code_request_dto.dart';
 
 enum ForgotPasswordEventType { idle, loading, failure, success, navigateToVery }
 
@@ -13,7 +13,7 @@ class ForgotPasswordEvent {
   const ForgotPasswordEvent.loading([String? msg])
       : this._(ForgotPasswordEventType.loading, message: msg);
   const ForgotPasswordEvent.success() : this._(ForgotPasswordEventType.success);
-  const ForgotPasswordEvent.navigateToVery(SendCodeDataModel data)
+  const ForgotPasswordEvent.navigateToVery(SendCodeRequestDto data)
       : this._(ForgotPasswordEventType.navigateToVery, data: data);
   const ForgotPasswordEvent.failure([String? msg])
       : this._(ForgotPasswordEventType.failure, message: msg);

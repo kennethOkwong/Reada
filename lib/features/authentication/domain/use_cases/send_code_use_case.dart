@@ -1,5 +1,5 @@
 import 'package:reada/app/result.dart';
-import 'package:reada/features/authentication/domain/entities/send_code_data_model.dart';
+import 'package:reada/features/authentication/data/dtos/send_code_request_dto.dart';
 import 'package:reada/features/authentication/domain/repository/auth_repository.dart';
 
 class SendCodeUseCase {
@@ -7,7 +7,7 @@ class SendCodeUseCase {
 
   SendCodeUseCase(this.repository);
 
-  Future<Result> call(SendCodeDataModel data) async {
+  Future<Result> call(SendCodeRequestDto data) async {
     return await repository.sendOTP(data);
   }
 }

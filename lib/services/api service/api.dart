@@ -9,6 +9,7 @@ import 'package:reada/app/locator.dart';
 import 'package:reada/services/api%20service/api_response.dart';
 import 'package:reada/services/app_logger.dart';
 import 'package:reada/services/local_storage_service.dart';
+import 'package:reada/shared/constants.dart';
 
 class Api {
   final AppFlavorConfig _config = locator<AppFlavorConfig>();
@@ -97,7 +98,7 @@ class Api {
 
       return ApiResponse(
         isSuccessful: false,
-        message: 'Something went wrong',
+        message: Constants.genericError,
       );
     } catch (e, s) {
       debugPrint('$e');
@@ -105,7 +106,7 @@ class Api {
 
       return ApiResponse(
         isSuccessful: false,
-        message: 'Something went wrong',
+        message: Constants.genericError,
       );
     }
   }
@@ -191,7 +192,7 @@ class Api {
 
       return ApiResponse(
         isSuccessful: false,
-        message: 'Something went wrong',
+        message: Constants.genericError,
       );
     } catch (e, s) {
       debugPrint('$e');
@@ -199,7 +200,7 @@ class Api {
 
       return ApiResponse(
         isSuccessful: false,
-        message: 'Something went wrong',
+        message: Constants.genericError,
       );
     }
   }

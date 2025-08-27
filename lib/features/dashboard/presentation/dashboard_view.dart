@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:reada/app/base/base_ui.dart';
-import 'package:reada/app/theme/colors.dart';
 import 'package:reada/features/dashboard/domain/models/bottom_nav_model.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_event.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_viewmodel.dart';
 import 'package:reada/shared/app%20images/svg_icons.dart';
+import 'package:reada/shared/extensions/build_context_extension.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -45,7 +45,7 @@ class DashboardView extends StatelessWidget {
                   bottom: false,
                   child: Container(
                     height: 100,
-                    color: AppColors.blue50,
+                    color: context.colorScheme.primary,
                     child: Material(
                       type: MaterialType.transparency,
                       child: Row(

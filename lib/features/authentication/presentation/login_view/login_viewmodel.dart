@@ -1,31 +1,30 @@
 import 'package:reada/app/base/base_vm.dart';
-import 'package:reada/features/authentication/domain/entities/login_data_model.dart';
+import 'package:reada/features/authentication/data/dtos/login_request_dto.dart';
+import 'package:reada/features/authentication/domain/use_cases/auth_use_cases.dart';
 import 'package:reada/features/authentication/presentation/login_view/login_event.dart';
 
 class LoginViewmodel extends BaseViewModel<LoginEvent> {
-  final data = LoginDataModel();
+  LoginRequestDto data = LoginRequestDto.empty();
 
   void onEmailChanged(String? value) {
-    data.email = value;
+    data = data.copyWith(email: value);
   }
 
   void onPasswordChanged(String? value) {
-    data.password = value;
+    data = data.copyWith(password: value);
   }
 
   Future<void> login() async {
-    try {
-      startLoader();
-      var response = await authRepository.login(data: data);
-      stopLoader();
-      if (response.isSuccessful) {
+    startLoader();
+    var result = await loginUseCase.call(data);
+    stopLoader();
+    result.when(
+      success: (data) {
         emitEvent(const LoginEvent.success());
-        return;
-      }
-      emitEvent(LoginEvent.failure(response.message));
-    } catch (error) {
-      stopLoader();
-      emitEvent(const LoginEvent.failure());
-    }
+      },
+      failure: (message) {
+        emitEvent(LoginEvent.failure(message));
+      },
+    );
   }
 }

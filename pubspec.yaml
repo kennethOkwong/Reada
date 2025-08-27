@@ -1,7 +1,7 @@
 name: reada
 description: "Reada mobile application"
 publish_to: 'none' 
-version: 1.0.4+4
+version: 1.0.7+7
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -22,11 +22,21 @@ dependencies:
   flutter_svg: ^2.2.0
   equatable: ^2.0.7
   intl_phone_field: ^3.2.0
+  intl: ^0.20.2
+  collection: ^1.19.1
+  image_picker: ^1.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/launcher_icon.png"
+  min_sdk_android: 21
 
 flutter:
   uses-material-design: true

@@ -5,17 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LocalStorageKeys {
   static String refreshToken = 'refreshToken';
   static String accessToken = 'accessToken';
-  static String expiresIn = 'expiresIn';
 }
 
 class LocalStorageService {
-  static String? refreshToken;
-  static String? accessToken;
-  final SharedPreferences sharedPreferences = locator<SharedPreferences>();
   final fSStorage = const FlutterSecureStorage();
+  final SharedPreferences sharedPreferences = locator<SharedPreferences>();
 
   Future<String?> getStorageValue(String key) async {
-// Read value
+    // Read value
     final value = await fSStorage.read(key: key);
     return value;
   }
@@ -27,7 +24,6 @@ class LocalStorageService {
   Future<void> clearAuthAll() async {
     await fSStorage.delete(key: LocalStorageKeys.accessToken);
     await fSStorage.delete(key: LocalStorageKeys.refreshToken);
-    await fSStorage.delete(key: LocalStorageKeys.expiresIn);
   }
 
   Future<void> clearAll() async => fSStorage.deleteAll();

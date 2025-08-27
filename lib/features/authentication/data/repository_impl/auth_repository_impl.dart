@@ -1,10 +1,11 @@
 import 'package:reada/app/result.dart';
-import 'package:reada/features/authentication/domain/entities/login_data_model.dart';
-import 'package:reada/features/authentication/domain/entities/register_user_model.dart';
-import 'package:reada/features/authentication/domain/entities/reset_password_data_model.dart';
-import 'package:reada/features/authentication/domain/entities/send_code_data_model.dart';
-import 'package:reada/features/authentication/domain/entities/verify_code_data_model.dart';
-import 'package:reada/services/api%20service/api_response.dart';
+import 'package:reada/features/authentication/data/dtos/login_request_dto.dart';
+import 'package:reada/features/authentication/data/dtos/register_request_dto.dart';
+import 'package:reada/features/authentication/data/dtos/reset_password_request_dto.dart';
+import 'package:reada/features/authentication/data/dtos/send_code_request_dto.dart';
+import 'package:reada/features/authentication/data/dtos/verify_code_request_dto.dart';
+import 'package:reada/features/authentication/domain/entities/user.dart';
+import 'package:reada/shared/constants.dart';
 
 import '../../domain/repository/auth_repository.dart';
 import '../data_source/auth_data_source.dart';
@@ -15,33 +16,37 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.authDataSource);
 
   @override
-  Future<ApiResponse> login({required LoginDataModel data}) async {
-    return await authDataSource.login(data: data);
+  Future<Result<User>> login({required LoginRequestDto data}) async {
+    try {
+      final result = await authDataSource.login(requestData: data);
+      return result.map((dto) => dto.toDomain());
+    } catch (e) {
+      return Failure(Constants.genericError);
+    }
   }
 
   @override
-  Future<Result> register({required RegisterUserDataModel data}) async {
+  Future<Result> register({required RegisterRequestDto data}) async {
     return await authDataSource.register(data: data);
   }
 
   @override
-  Future<ApiResponse> verifyOTP({required VerifyCodeDataModel data}) async {
+  Future<Result> verifyOTP({required VerifyCodeRequestDto data}) async {
     return await authDataSource.verifyOTP(data: data);
   }
 
   @override
-  Future<ApiResponse> resetPassword(
-      {required ResetPasswordDataModel data}) async {
+  Future<Result> resetPassword({required ResetPasswordRequestDto data}) async {
     return await authDataSource.resetPassword(data: data);
   }
 
   @override
-  Future<Result> sendOTP(SendCodeDataModel data) async {
+  Future<Result> sendOTP(SendCodeRequestDto data) async {
     return await authDataSource.sendOTP(data);
   }
 
   @override
-  Future<ApiResponse> getUser() async {
+  Future<Result> getUser() async {
     return await authDataSource.getUser();
   }
 }

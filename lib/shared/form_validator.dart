@@ -57,7 +57,9 @@ class FormValidator {
     String? password,
     String? confirmPassword,
   ) {
-    if (password == null || password.isEmpty) return 'Field is required';
+    if (confirmPassword == null || confirmPassword.isEmpty) {
+      return 'Field is required';
+    }
     if (confirmPassword != password) {
       return 'Passwords do not match';
     }
@@ -75,6 +77,16 @@ class FormValidator {
 
     if (!RegExp(r'^[a-z A-Z]+$').hasMatch(name)) {
       return 'Name cannot include special charaters';
+    }
+
+    return null;
+  }
+
+  static String? validateCode(String? code) {
+    if (code == null || code.isEmpty) return 'Code is required';
+
+    if (!RegExp(r'^[0-9]').hasMatch(code) || code.length < 4) {
+      return 'Please enter a valid code';
     }
 
     return null;

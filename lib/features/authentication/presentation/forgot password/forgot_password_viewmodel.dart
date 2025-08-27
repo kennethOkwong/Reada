@@ -1,60 +1,57 @@
 import 'package:reada/app/base/base_vm.dart';
-import 'package:reada/features/authentication/domain/entities/reset_password_data_model.dart';
-import 'package:reada/features/authentication/domain/entities/send_code_data_model.dart';
+import 'package:reada/features/authentication/data/dtos/reset_password_request_dto.dart';
+import 'package:reada/features/authentication/data/dtos/send_code_request_dto.dart';
 import 'package:reada/features/authentication/domain/use_cases/auth_use_cases.dart';
 import 'package:reada/features/authentication/presentation/forgot%20password/forgot_password_event.dart';
 import 'package:reada/shared/enums/verification_type_enum.dart';
 
 class ForgotPasswordViewmodel extends BaseViewModel<ForgotPasswordEvent> {
-  final codeModel =
-      SendCodeDataModel(codeType: CodeType.passwordReset.readableName);
-  final passwordResetModel = ResetPasswordDataModel();
+  SendCodeRequestDto codeModel = SendCodeRequestDto(
+    codeType: CodeType.passwordReset.readableName,
+  );
+  ResetPasswordRequestDto passwordResetModel = ResetPasswordRequestDto.empty();
+
+  void init(String email) {
+    passwordResetModel = passwordResetModel.copyWith(email: email);
+  }
 
   void onEmailChanged(String? value) {
-    codeModel.email = value;
+    codeModel = codeModel.copyWith(email: value);
   }
 
   void onPasswordChanged(String? value) {
-    passwordResetModel.password = value;
+    passwordResetModel = passwordResetModel.copyWith(password: value);
+  }
+
+  void onCPasswordChanged(String? value) {
+    passwordResetModel = passwordResetModel.copyWith(cPassword: value);
   }
 
   Future<void> sendCode() async {
-    try {
-      startLoader();
-      var result = await sendCodeUseCase.call(codeModel);
-      stopLoader();
-      result.when(
-        success: (data) {
-          emitEvent(ForgotPasswordEvent.navigateToVery(codeModel));
-        },
-        failure: (message) {
-          emitEvent(ForgotPasswordEvent.failure(message));
-        },
-      );
-
-      return;
-    } catch (error) {
-      stopLoader();
-      emitEvent(const ForgotPasswordEvent.failure());
-      return;
-    }
+    startLoader();
+    var result = await sendCodeUseCase.call(codeModel);
+    stopLoader();
+    result.when(
+      success: (data) {
+        emitEvent(ForgotPasswordEvent.navigateToVery(codeModel));
+      },
+      failure: (message) {
+        emitEvent(ForgotPasswordEvent.failure(message));
+      },
+    );
   }
 
-  Future<void> resetPassword(String email) async {
-    passwordResetModel.email = email;
-    try {
-      startLoader();
-      var response =
-          await authRepository.resetPassword(data: passwordResetModel);
-      stopLoader();
-      if (response.isSuccessful) {
+  Future<void> resetPassword() async {
+    startLoader();
+    var result = await resetPasswordUseCase.call(passwordResetModel);
+    stopLoader();
+    result.when(
+      success: (data) {
         emitEvent(const ForgotPasswordEvent.success());
-        return;
-      }
-      emitEvent(ForgotPasswordEvent.failure(response.message));
-    } catch (error) {
-      stopLoader();
-      emitEvent(const ForgotPasswordEvent.failure());
-    }
+      },
+      failure: (message) {
+        emitEvent(ForgotPasswordEvent.failure(message));
+      },
+    );
   }
 }
