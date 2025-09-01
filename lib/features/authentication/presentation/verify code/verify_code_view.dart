@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:reada/app/app_strings/app_strings.dart';
+import 'package:reada/app/app_strings/success_strings.dart';
 import 'package:reada/app/base/base_ui.dart';
 import 'package:reada/features/authentication/data/dtos/send_code_request_dto.dart';
 import 'package:reada/features/authentication/presentation/verify%20code/verify_code_event.dart';
 import 'package:reada/features/authentication/presentation/verify%20code/verify_code_viewmodel.dart';
-import 'package:reada/services/services.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
@@ -34,22 +34,22 @@ class _EnterCodeViewState extends State<EnterCodeView> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<VerifyCodeViewmodel, VerifyCodeEvent>(
+    return BaseView<VerifyCodeViewmodel, VerifyCodeEvent, void>(
       onModelReady: (vm) => vm.init(widget.codeModel),
-      onEvent: (context, model, event) {
+      onEvent: (context, vm, event) {
         switch (event.type) {
           case VerifyCodeEventType.verifySuccess:
-            Services.navigationService.goBack<bool>(true);
+            context.pop(true);
             break;
           case VerifyCodeEventType.verifyFailure:
-            log(event.message.toString());
-            HelperFunctions.showErrorToast(event.message);
+            HelperFunctions.showErrorToast(event.message!);
             break;
           case VerifyCodeEventType.resendSuccess:
-            HelperFunctions.showErrorToast('Code resent');
+            HelperFunctions.showErrorToast(SuccessStrings.codeResent);
+            vm.startTimer();
             break;
           case VerifyCodeEventType.resendFailure:
-            HelperFunctions.showErrorToast(event.message);
+            HelperFunctions.showErrorToast(event.message!);
             break;
           default:
             break;
@@ -69,11 +69,10 @@ class _EnterCodeViewState extends State<EnterCodeView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // context.vSpacing32,
                           Text.rich(
                             textAlign: TextAlign.center,
                             TextSpan(
-                              text: 'Enter verification code sent to\n',
+                              text: AppStrings.enterVerification,
                               style: context.textTheme.bodyMedium,
                               children: [
                                 TextSpan(
@@ -98,7 +97,7 @@ class _EnterCodeViewState extends State<EnterCodeView> {
                 ),
                 ReadaButton.filled(
                   width: double.infinity,
-                  title: 'Submit',
+                  title: AppStrings.submit,
                   borderRadius: 24,
                   onPressed: () {
                     if (_key.currentState!.validate()) {
@@ -111,7 +110,7 @@ class _EnterCodeViewState extends State<EnterCodeView> {
                   children: [
                     Text.rich(
                       TextSpan(
-                        text: 'Did not receive code? ',
+                        text: AppStrings.didNotReceive,
                         style: context.textTheme.bodyMedium,
                         children: [
                           TextSpan(
@@ -125,9 +124,8 @@ class _EnterCodeViewState extends State<EnterCodeView> {
                     ),
                     ReadaButton.text(
                       enabled: vm.time == 0,
-                      title: 'Resend',
+                      title: AppStrings.resend,
                       onPressed: () {
-                        vm.startTimer();
                         vm.resendCode(widget.codeModel);
                       },
                     ),

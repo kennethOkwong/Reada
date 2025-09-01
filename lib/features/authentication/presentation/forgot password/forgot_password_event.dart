@@ -15,6 +15,6 @@ class ForgotPasswordEvent {
   const ForgotPasswordEvent.success() : this._(ForgotPasswordEventType.success);
   const ForgotPasswordEvent.navigateToVery(SendCodeRequestDto data)
       : this._(ForgotPasswordEventType.navigateToVery, data: data);
-  const ForgotPasswordEvent.failure([String? msg])
+  const ForgotPasswordEvent.failure(String msg)
       : this._(ForgotPasswordEventType.failure, message: msg);
 }

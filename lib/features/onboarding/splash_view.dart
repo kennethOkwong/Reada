@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
-import 'package:reada/services/services.dart';
 import 'package:reada/shared/app%20images/images.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
 
@@ -91,7 +91,7 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
         Timer(
           const Duration(milliseconds: 1000),
           () {
-            Services.navigationService.navigateToReplace(AppRoutes.intro);
+            context.go(AppRoutes.intro);
           },
         );
       }

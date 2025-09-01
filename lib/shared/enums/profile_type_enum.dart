@@ -4,7 +4,7 @@ enum ProfileType {
   bookstore(
     label: "Bookstore",
     icon: Icons.store,
-    value: "bookstore",
+    value: "store",
     enabled: true,
   ),
   author(

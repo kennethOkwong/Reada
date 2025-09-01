@@ -6,8 +6,9 @@ class SvgData {
   String get path => _path;
   static const String appLogo = '$_path/logo.svg';
 
-  static const String icStoreActive = '$_path/ic_store_active.svg';
-  static const String icStoreInactive = '$_path/ic_store_inactive.svg';
+  static const String icStore = '$_path/stores.svg';
+  static const String icOrders = '$_path/orders.svg';
+  static const String icInventory = '$_path/inventory.svg';
 }
 
 class SvgIcon extends StatelessWidget {

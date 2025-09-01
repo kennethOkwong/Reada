@@ -3,7 +3,7 @@ import 'package:reada/features/authentication/data/dtos/register_request_dto.dar
 import 'package:reada/features/authentication/domain/use_cases/auth_use_cases.dart';
 import 'package:reada/features/authentication/presentation/register_view/register_event.dart';
 
-class RegisterViewmodel extends BaseViewModel<RegisterEvent> {
+class RegisterViewmodel extends BaseViewModel<RegisterEvent, void> {
   RegisterRequestDto data = RegisterRequestDto.empty();
   int currentStep = 0;
   bool isForward = true;
@@ -45,15 +45,15 @@ class RegisterViewmodel extends BaseViewModel<RegisterEvent> {
   }
 
   Future<void> register() async {
-    startLoader();
+    setLoading();
     var result = await registerUseCase.call(data);
-    stopLoader();
+    setIdle();
     result.when(
-      success: (data) {
+      success: (data, message) {
         emitEvent(const RegisterEvent.success());
       },
-      failure: (message) {
-        emitEvent(RegisterEvent.failure(message));
+      failure: (exception) {
+        emitEvent(RegisterEvent.failure(exception.toString()));
       },
     );
   }

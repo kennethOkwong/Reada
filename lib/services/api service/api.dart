@@ -7,9 +7,11 @@ import 'package:http/http.dart';
 import 'package:reada/app/flavour/flavor_config.dart';
 import 'package:reada/app/locator.dart';
 import 'package:reada/services/api%20service/api_response.dart';
+import 'package:reada/services/api%20service/error_handling/exception_handler.dart';
 import 'package:reada/services/app_logger.dart';
 import 'package:reada/services/local_storage_service.dart';
-import 'package:reada/shared/constants.dart';
+import 'package:reada/shared/extensions/map.dart';
+import 'package:reada/shared/typedefs.dart';
 
 class Api {
   final AppFlavorConfig _config = locator<AppFlavorConfig>();
@@ -21,8 +23,7 @@ class Api {
     'Content-Type': 'application/json; charset=UTF-8',
   };
   final log = applogger(Api);
-  final LocalStorageService localStorageService =
-      locator<LocalStorageService>();
+  final localStorageService = LocalStorageService();
 
   ///Sends a POST request to the given URL with the given body.
   Future<ApiResponse> postData(
@@ -76,38 +77,8 @@ class Api {
         body: body,
         isMultiPart: isMultiPart,
       );
-    } on SocketException catch (e) {
-      debugPrint('$e');
-      log.e('SocketException: $e');
-      return ApiResponse(
-        isSuccessful: false,
-        message: 'No Internet connection',
-      );
-    } on TimeoutException catch (e) {
-      log.e('TimeoutException: $e');
-      return ApiResponse.timout();
-    } on ClientException catch (e) {
-      log.e('Error: $e');
-
-      return ApiResponse(
-        isSuccessful: false,
-        message: 'There was a problem connecting to the server',
-      );
-    } on Exception catch (e, s) {
-      log.e('Error: $e', stackTrace: s);
-
-      return ApiResponse(
-        isSuccessful: false,
-        message: Constants.genericError,
-      );
     } catch (e, s) {
-      debugPrint('$e');
-      log.e('Error: $e', stackTrace: s);
-
-      return ApiResponse(
-        isSuccessful: false,
-        message: Constants.genericError,
-      );
+      throw ExceptionHandler.mapToReadaException(e, s);
     }
   }
 
@@ -115,7 +86,7 @@ class Api {
   ///Takes a map of {"fileNames": File}
   Future<ApiResponse> postMultipleFilesData(
     String url,
-    dynamic body, {
+    JSON body, {
     bool hasHeader = false,
     required Map<String, File?> files,
   }) async {
@@ -139,69 +110,19 @@ class Api {
         }
       }
 
-      // final request = await files.entries
-      //     .map((file) async {
-      //       if (file.value != null) {
-      //         final filename = file.value!.path.split('/').last;
-      //         final fileStream = ByteStream(file.value!.openRead());
-      //         final fileLength = await file.value!.length();
-      //         final multipartFile = MultipartFile(
-      //           file.key,
-      //           fileStream,
-      //           fileLength,
-      //           filename: filename,
-      //         );
+      final allString = body.convertDynamicToString();
+      multiPartequest.fields.addAll(allString);
 
-      //         multiPartequest.files.add(multipartFile);
-      //         return multiPartequest;
-      //       }
-      //     })
-      //     .toList()
-      //     .last;
-
-      if (body != null) {
-        multiPartequest.fields.addAll(body);
-      }
-
-      log.d('POST request to ${_baseUrl + url} with body: $body');
+      log.d('POST request to ${_baseUrl + url} with body: $allString');
       //with body: $body
       return await _sendRequest(
         multiPartequest,
         hasHeader,
-        body: body,
+        body: allString,
         isMultiPart: true,
       );
-    } on SocketException catch (e) {
-      debugPrint('$e');
-      log.e('SocketException: $e');
-      return ApiResponse(
-        isSuccessful: false,
-        message: 'No Internet connection',
-      );
-    } on TimeoutException catch (e) {
-      log.e('TimeoutException: $e');
-      return ApiResponse.timout();
-    } on ClientException catch (e) {
-      log.e('Error: $e');
-      return ApiResponse(
-        isSuccessful: false,
-        message: 'There was a problem connecting to the server',
-      );
-    } on Exception catch (e, s) {
-      log.e('Error: $e', stackTrace: s);
-
-      return ApiResponse(
-        isSuccessful: false,
-        message: Constants.genericError,
-      );
     } catch (e, s) {
-      debugPrint('$e');
-      log.e('Error: $e', stackTrace: s);
-
-      return ApiResponse(
-        isSuccessful: false,
-        message: Constants.genericError,
-      );
+      throw ExceptionHandler.mapToReadaException(e, s);
     }
   }
 
@@ -256,30 +177,8 @@ class Api {
         body: body,
         isMultiPart: isMultiPart,
       );
-    } on SocketException catch (e) {
-      debugPrint('$e');
-      log.e('SocketException: $e');
-      return ApiResponse(
-        isSuccessful: false,
-        message: 'No Internet connection',
-      );
-    } on TimeoutException catch (e) {
-      log.e('TimeoutException: $e');
-      return ApiResponse.timout();
-    } on Exception catch (e) {
-      log.e('Error: $e');
-
-      return ApiResponse(
-        isSuccessful: false,
-        message: e.toString(),
-      );
     } catch (e, s) {
-      log.d(s);
-      debugPrint('$e');
-      return ApiResponse(
-        isSuccessful: false,
-        message: e.toString(),
-      );
+      throw ExceptionHandler.mapToReadaException(e, s);
     }
   }
 
@@ -302,22 +201,8 @@ class Api {
         request,
         hasHeader,
       );
-    } on SocketException catch (e) {
-      log.e('SocketException: $e');
-      return ApiResponse(
-        isSuccessful: false,
-        message: 'No Internet connection',
-      );
-    } on TimeoutException catch (e) {
-      log.e('TimeoutException: $e');
-      return ApiResponse.timout();
-    } on Exception catch (e) {
-      log.e('Error signing in with: $e');
-
-      return ApiResponse(
-        isSuccessful: false,
-        message: e.toString(),
-      );
+    } catch (e, s) {
+      throw ExceptionHandler.mapToReadaException(e, s);
     }
   }
 
@@ -340,22 +225,8 @@ class Api {
         hasHeader,
         body: body,
       );
-    } on SocketException catch (e) {
-      log.e('SocketException: $e');
-      return ApiResponse(
-        isSuccessful: false,
-        message: 'No Internet connection',
-      );
-    } on TimeoutException catch (e) {
-      log.e('TimeoutException: $e');
-      return ApiResponse.timout();
-    } on Exception catch (e) {
-      log.e('Error signing in with: $e');
-
-      return ApiResponse(
-        isSuccessful: false,
-        message: e.toString(),
-      );
+    } catch (e, s) {
+      throw ExceptionHandler.mapToReadaException(e, s);
     }
   }
 
@@ -386,12 +257,12 @@ class Api {
       final userValue = await localStorageService
           .getStorageValue(LocalStorageKeys.accessToken);
       networkHeaders['Authorization'] = 'Bearer $userValue';
+    } else {
+      networkHeaders.remove('Authorization');
     }
+    log.d(networkHeaders);
     request.headers.addAll(networkHeaders);
     final response = await request.send();
-    // .timeout(
-    //       const Duration(milliseconds: 8000),
-    //     );
 
     return _response(response);
   }
@@ -429,7 +300,7 @@ Future<ApiResponse> _response(
     }
     return ApiResponse(
       isSuccessful: true,
-      data: decodedJson,
+      data: decodedJson['data'],
       message: message ?? 'success',
     );
   } else if (response.statusCode == 204) {

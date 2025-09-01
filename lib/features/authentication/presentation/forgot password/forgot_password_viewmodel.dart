@@ -5,7 +5,7 @@ import 'package:reada/features/authentication/domain/use_cases/auth_use_cases.da
 import 'package:reada/features/authentication/presentation/forgot%20password/forgot_password_event.dart';
 import 'package:reada/shared/enums/verification_type_enum.dart';
 
-class ForgotPasswordViewmodel extends BaseViewModel<ForgotPasswordEvent> {
+class ForgotPasswordViewmodel extends BaseViewModel<ForgotPasswordEvent, void> {
   SendCodeRequestDto codeModel = SendCodeRequestDto(
     codeType: CodeType.passwordReset.readableName,
   );
@@ -28,29 +28,29 @@ class ForgotPasswordViewmodel extends BaseViewModel<ForgotPasswordEvent> {
   }
 
   Future<void> sendCode() async {
-    startLoader();
+    setLoading();
     var result = await sendCodeUseCase.call(codeModel);
-    stopLoader();
+    setIdle();
     result.when(
-      success: (data) {
+      success: (data, message) {
         emitEvent(ForgotPasswordEvent.navigateToVery(codeModel));
       },
-      failure: (message) {
-        emitEvent(ForgotPasswordEvent.failure(message));
+      failure: (exception) {
+        emitEvent(ForgotPasswordEvent.failure(exception.toString()));
       },
     );
   }
 
   Future<void> resetPassword() async {
-    startLoader();
+    setLoading();
     var result = await resetPasswordUseCase.call(passwordResetModel);
-    stopLoader();
+    setIdle();
     result.when(
-      success: (data) {
+      success: (data, message) {
         emitEvent(const ForgotPasswordEvent.success());
       },
-      failure: (message) {
-        emitEvent(ForgotPasswordEvent.failure(message));
+      failure: (exception) {
+        emitEvent(ForgotPasswordEvent.failure(exception.toString()));
       },
     );
   }

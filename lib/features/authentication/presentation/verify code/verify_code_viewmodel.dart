@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:intl/intl.dart';
 import 'package:reada/app/base/base_vm.dart';
@@ -7,11 +6,10 @@ import 'package:reada/features/authentication/data/dtos/send_code_request_dto.da
 import 'package:reada/features/authentication/data/dtos/verify_code_request_dto.dart';
 import 'package:reada/features/authentication/domain/use_cases/auth_use_cases.dart';
 import 'package:reada/features/authentication/presentation/verify%20code/verify_code_event.dart';
-import 'package:reada/shared/constants.dart';
 
-class VerifyCodeViewmodel extends BaseViewModel<VerifyCodeEvent> {
+class VerifyCodeViewmodel extends BaseViewModel<VerifyCodeEvent, void> {
   Timer? _timer;
-  int time = 60;
+  int time = 30;
   VerifyCodeRequestDto _data = VerifyCodeRequestDto.empty();
 
   String get timeLeft {
@@ -20,7 +18,7 @@ class VerifyCodeViewmodel extends BaseViewModel<VerifyCodeEvent> {
   }
 
   void startTimer() {
-    time = 60;
+    time = 30;
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
@@ -32,6 +30,12 @@ class VerifyCodeViewmodel extends BaseViewModel<VerifyCodeEvent> {
         notifyListeners();
       },
     );
+  }
+
+  void resetTimer() {
+    _timer?.cancel();
+    time = 0;
+    notifyListeners();
   }
 
   void onCompleted(String code) {
@@ -47,31 +51,29 @@ class VerifyCodeViewmodel extends BaseViewModel<VerifyCodeEvent> {
   }
 
   Future<void> verifyCode() async {
-    startLoader();
+    setLoading();
     var result = await verifyCodeUseCase.call(_data);
-    stopLoader();
+    setIdle();
     result.when(
-      success: (data) {
-        log(data.toString());
+      success: (data, message) {
         emitEvent(const VerifyCodeEvent.verifySuccess());
       },
-      failure: (message) {
-        log(message.toString());
-        emitEvent(VerifyCodeEvent.verifyFailure(message));
+      failure: (exception) {
+        emitEvent(VerifyCodeEvent.verifyFailure(exception.toString()));
       },
     );
   }
 
   Future<void> resendCode(SendCodeRequestDto codeModel) async {
-    startLoader();
+    setLoading();
     final result = await sendCodeUseCase.call(codeModel);
-    stopLoader();
+    setIdle();
     result.when(
-      success: (data) {
+      success: (data, message) {
         emitEvent(const VerifyCodeEvent.resendSuccess());
       },
-      failure: (message) {
-        emitEvent(VerifyCodeEvent.resendFailure(Constants.genericError));
+      failure: (exception) {
+        emitEvent(VerifyCodeEvent.resendFailure(exception.toString()));
       },
     );
   }

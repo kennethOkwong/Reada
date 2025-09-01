@@ -1,3 +1,4 @@
+import 'package:reada/features/authentication/data/dtos/login_request_dto.dart';
 import 'package:reada/features/authentication/data/dtos/send_code_request_dto.dart';
 import 'package:reada/shared/enums/user_type_enum.dart';
 import 'package:reada/shared/enums/verification_type_enum.dart';
@@ -64,5 +65,9 @@ class RegisterRequestDto {
       email: email,
       codeType: CodeType.userVerification.readableName,
     );
+  }
+
+  LoginRequestDto toLoginDto() {
+    return LoginRequestDto(email: email, password: password);
   }
 }

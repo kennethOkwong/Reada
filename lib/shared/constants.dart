@@ -7,5 +7,6 @@ class Constants {
 
   static String defaultPhone = '';
   static String defaultTimeStamp = "2025-08-08T00:31:23.963102Z";
-  static String genericError = "An error occured, please try again later";
+  static String defaultBusinessDesc = "";
+  static String defaultBusinesslogo = "";
 }

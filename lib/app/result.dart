@@ -1,11 +1,11 @@
-import 'package:reada/shared/constants.dart';
+import 'package:reada/services/api%20service/error_handling/exceptions.dart';
 
 abstract class Result<T> {
   const Result();
 
   R when<R>({
-    required R Function(T? data) success,
-    required R Function(String message) failure,
+    required R Function(T? data, String? message) success,
+    required R Function(ReadaException exception) failure,
   });
 
   bool get isSuccess => this is Success<T>;
@@ -14,22 +14,29 @@ abstract class Result<T> {
   /// ✅ Transform the success value (like Either.map)
   Result<R> map<R>(R Function(T data) transform) {
     if (this is Success<T>) {
-      final data = (this as Success<T>).data;
+      final success = this as Success<T>;
+      final data = success.data;
       if (data == null) {
-        return Failure<R>(Constants.genericError);
+        return Failure<R>(const ReadaUnknownException());
       }
-      return Success<R>(transform(data));
+      return Success<R>(
+        data: transform(data),
+        message: success.message,
+      );
     } else if (this is Failure<T>) {
-      return Failure<R>((this as Failure<T>).error);
+      final failure = this as Failure<T>;
+      return Failure<R>(failure.exception);
     }
-    return Failure<R>(Constants.genericError);
+    return Failure<R>(const ReadaUnknownException());
   }
 
-  /// ✅ Transform the failure message (like Either.mapLeft)
-  Result<T> mapFailure(String Function(String message) transform) {
+  /// ✅ Transform the failure (like Either.mapLeft)
+  Result<T> mapFailure(
+    ReadaException Function(ReadaException exception) transform,
+  ) {
     if (this is Failure<T>) {
-      final error = (this as Failure<T>).error ?? Constants.genericError;
-      return Failure<T>(transform(error));
+      final failure = this as Failure<T>;
+      return Failure<T>(transform(failure.exception));
     }
     return this;
   }
@@ -37,28 +44,29 @@ abstract class Result<T> {
 
 class Success<T> extends Result<T> {
   final T? data;
+  final String? message;
 
-  const Success([this.data]);
+  const Success({this.data, this.message});
 
   @override
   R when<R>({
-    required R Function(T? data) success,
-    required R Function(String message) failure,
+    required R Function(T? data, String? message) success,
+    required R Function(ReadaException exception) failure,
   }) {
-    return success(data);
+    return success(data, message);
   }
 }
 
 class Failure<T> extends Result<T> {
-  final String? error;
+  final ReadaException exception;
 
-  const Failure([this.error]);
+  const Failure(this.exception);
 
   @override
   R when<R>({
-    required R Function(T? data) success,
-    required R Function(String message) failure,
+    required R Function(T? data, String? message) success,
+    required R Function(ReadaException exception) failure,
   }) {
-    return failure(error ?? Constants.genericError);
+    return failure(exception);
   }
 }

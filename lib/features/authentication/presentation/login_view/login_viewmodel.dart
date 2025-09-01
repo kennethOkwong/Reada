@@ -3,7 +3,7 @@ import 'package:reada/features/authentication/data/dtos/login_request_dto.dart';
 import 'package:reada/features/authentication/domain/use_cases/auth_use_cases.dart';
 import 'package:reada/features/authentication/presentation/login_view/login_event.dart';
 
-class LoginViewmodel extends BaseViewModel<LoginEvent> {
+class LoginViewmodel extends BaseViewModel<LoginEvent, void> {
   LoginRequestDto data = LoginRequestDto.empty();
 
   void onEmailChanged(String? value) {
@@ -15,15 +15,15 @@ class LoginViewmodel extends BaseViewModel<LoginEvent> {
   }
 
   Future<void> login() async {
-    startLoader();
+    setLoading();
     var result = await loginUseCase.call(data);
-    stopLoader();
+    setIdle();
     result.when(
-      success: (data) {
-        emitEvent(const LoginEvent.success());
+      success: (data, message) {
+        emitEvent(LoginEvent.success(data!));
       },
-      failure: (message) {
-        emitEvent(LoginEvent.failure(message));
+      failure: (exception) {
+        emitEvent(LoginEvent.failure(exception.toString()));
       },
     );
   }

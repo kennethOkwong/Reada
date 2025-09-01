@@ -1,5 +1,7 @@
+import 'package:reada/features/authentication/domain/entities/business_profile.dart';
+
 class User {
-  final String id;
+  final int id;
   final String email;
   final String firstName;
   final String lastName;
@@ -10,7 +12,7 @@ class User {
   final String dateJoined;
   final String accessToken;
   final String refreshToken;
-
+  final List<BusinessProfile> businessProfiles;
   User({
     required this.id,
     required this.email,
@@ -23,5 +25,6 @@ class User {
     required this.dateJoined,
     required this.accessToken,
     required this.refreshToken,
+    required this.businessProfiles,
   });
 }

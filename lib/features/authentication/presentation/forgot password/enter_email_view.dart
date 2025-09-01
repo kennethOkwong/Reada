@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:reada/app/app_strings/app_strings.dart';
 import 'package:reada/app/base/base_ui.dart';
 import 'package:reada/features/authentication/presentation/forgot%20password/forgot_password_event.dart';
 import 'package:reada/features/authentication/presentation/forgot%20password/forgot_password_viewmodel.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
-import 'package:reada/services/services.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/custom_app_bar.dart';
@@ -13,7 +14,7 @@ import 'package:reada/shared/helper_functions.dart';
 import 'package:reada/shared/text%20fields/custom_text_field.dart';
 
 class EnterEmailView extends StatefulWidget {
-  EnterEmailView({super.key});
+  const EnterEmailView({super.key});
 
   @override
   State<EnterEmailView> createState() => _EnterEmailViewState();
@@ -31,18 +32,20 @@ class _EnterEmailViewState extends State<EnterEmailView> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<ForgotPasswordViewmodel, ForgotPasswordEvent>(
+    return BaseView<ForgotPasswordViewmodel, ForgotPasswordEvent, void>(
       onEvent: (context, model, event) async {
         switch (event.type) {
           case ForgotPasswordEventType.failure:
-            HelperFunctions.showErrorToast(event.message);
+            HelperFunctions.showErrorToast(event.message!);
             break;
           case ForgotPasswordEventType.navigateToVery:
-            final verified = await Services.navigationService
-                .navigateTo(AppRoutes.enterCode, argument: event.data);
-            if (verified) {
-              Services.navigationService.navigateTo(AppRoutes.resetPassword,
-                  argument: event.data.email);
+            final verified =
+                await context.push(AppRoutes.enterCode, extra: event.data);
+            if (verified == true && context.mounted) {
+              context.push(
+                AppRoutes.resetPassword,
+                extra: event.data.email,
+              );
             }
             break;
           default:
@@ -52,7 +55,7 @@ class _EnterEmailViewState extends State<EnterEmailView> {
       builder: (context, model, child) {
         return Scaffold(
           appBar: const CustomAppBar(
-            title: 'Forgot password',
+            title: AppStrings.forgotPassword,
           ),
           body: Padding(
             padding: Constants.pagePadding(context),
@@ -66,13 +69,13 @@ class _EnterEmailViewState extends State<EnterEmailView> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Enter your registered email',
+                            AppStrings.enterEmail,
                             style: context.textTheme.bodyMedium,
                           ),
                           context.vSpacing16,
                           PrimaryTextField(
-                            title: 'Email',
-                            hintText: 'Email',
+                            title: AppStrings.email,
+                            hintText: AppStrings.email,
                             onChanged: model.onEmailChanged,
                             controller: emailTextController,
                             validator: FormValidator.validateEmail,
@@ -85,7 +88,7 @@ class _EnterEmailViewState extends State<EnterEmailView> {
                 ),
                 ReadaButton.filled(
                   width: double.infinity,
-                  title: 'Continue',
+                  title: AppStrings.continueString,
                   borderRadius: 24,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {

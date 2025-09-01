@@ -5,8 +5,10 @@ import 'package:reada/shared/extensions/build_context_extension.dart';
 
 class ImageUploadWidget extends StatefulWidget {
   final double size; // allow custom sizing
+  final Function(File? file) onSelected;
 
-  const ImageUploadWidget({super.key, this.size = 120});
+  const ImageUploadWidget(
+      {super.key, this.size = 120, required this.onSelected});
 
   @override
   State<ImageUploadWidget> createState() => _ImageUploadWidgetState();
@@ -23,6 +25,7 @@ class _ImageUploadWidgetState extends State<ImageUploadWidget> {
       setState(() {
         _imageFile = File(pickedFile.path);
       });
+      widget.onSelected(_imageFile);
     }
   }
 

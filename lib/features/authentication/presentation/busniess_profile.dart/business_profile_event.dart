@@ -1,4 +1,10 @@
-enum BusinessProfileEventType { idle, loading, failure, success }
+enum BusinessProfileEventType {
+  idle,
+  loading,
+  failure,
+  navigateToLogin,
+  navigateToDashborad
+}
 
 class BusinessProfileEvent {
   final BusinessProfileEventType type;
@@ -10,8 +16,10 @@ class BusinessProfileEvent {
   const BusinessProfileEvent.idle() : this._(BusinessProfileEventType.idle);
   const BusinessProfileEvent.loading([String? msg])
       : this._(BusinessProfileEventType.loading, message: msg);
-  const BusinessProfileEvent.success()
-      : this._(BusinessProfileEventType.success);
+  const BusinessProfileEvent.navigateToDashborad()
+      : this._(BusinessProfileEventType.navigateToDashborad);
+  const BusinessProfileEvent.navigateToLogin()
+      : this._(BusinessProfileEventType.navigateToLogin);
   const BusinessProfileEvent.failure(String msg)
       : this._(BusinessProfileEventType.failure, message: msg);
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:intl_phone_field/phone_number.dart';
+import 'package:go_router/go_router.dart';
+import 'package:reada/app/app_strings/app_strings.dart';
+import 'package:reada/app/app_strings/error_strings.dart';
+import 'package:reada/app/app_strings/success_strings.dart';
 import 'package:reada/app/base/base_ui.dart';
-import 'package:reada/app/theme/theme.dart';
 import 'package:reada/features/authentication/presentation/busniess_profile.dart/business_profile_event.dart';
 import 'package:reada/features/authentication/presentation/busniess_profile.dart/business_profile_viewmodel.dart';
 import 'package:reada/features/authentication/presentation/busniess_profile.dart/widgets/profile_type_selector.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
-import 'package:reada/services/services.dart';
 import 'package:reada/shared/app%20images/images.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
@@ -16,36 +17,31 @@ import 'package:reada/shared/form_validator.dart';
 import 'package:reada/shared/helper_functions.dart';
 import 'package:reada/shared/profile_image_upload.dart';
 import 'package:reada/shared/text%20fields/custom_text_field.dart';
-import 'package:reada/shared/text%20fields/phone_field.dart';
 
 final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-//phone field not validating alongside others, hence the need
-// for a seperate key
-final _phoneFieldKey = GlobalKey<FormFieldState<PhoneNumber>>();
+// // phone field not validating alongside others, hence the need
+// // for a separate key
+// final _phoneFieldKey = GlobalKey<FormFieldState<PhoneNumber>>();
 
 class BusinessProfileView extends StatelessWidget {
   const BusinessProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<BusinessProfileViewmodel, BusinessProfileEvent>(
+    return BaseView<BusinessProfileViewmodel, BusinessProfileEvent, void>(
       viewModel: BusinessProfileViewmodel(),
       onEvent: (context, vm, event) async {
         switch (event.type) {
           case BusinessProfileEventType.failure:
-            HelperFunctions.showErrorToast(event.message);
+            HelperFunctions.showErrorToast(event.message!);
             break;
-          case BusinessProfileEventType.success:
-            final verified = await Services.navigationService.navigateTo(
-                AppRoutes.enterCode,
-                argument: vm.data.toSendCodeDto());
-            if (verified == true) {
-              HelperFunctions.showSuccessToast('Account created successfully');
-              Services.navigationService.goBack();
-            } else {
-              HelperFunctions.showErrorToast('Failed to verify account');
-              Services.navigationService.goBack();
-            }
+          case BusinessProfileEventType.navigateToDashborad:
+            HelperFunctions.showSuccessToast(SuccessStrings.prifileCreated);
+            context.go(AppRoutes.dashboard);
+            break;
+          case BusinessProfileEventType.navigateToLogin:
+            HelperFunctions.showSuccessToast(SuccessStrings.prifileCreated);
+            context.go(AppRoutes.login);
             break;
           default:
             break;
@@ -54,7 +50,7 @@ class BusinessProfileView extends StatelessWidget {
       builder: (context, vm, child) {
         return Scaffold(
           appBar: CustomAppBar(
-            title: 'Business profile',
+            title: AppStrings.businessProfile,
             actions: [
               Padding(
                 padding: Constants.pagePadding(context),
@@ -82,13 +78,9 @@ class BusinessProfileView extends StatelessWidget {
                             },
                             child: vm.currentStep == 0
                                 ? _BusinessProfileForm1(
-                                    key: const ValueKey(0),
-                                    vm: vm,
-                                  )
+                                    key: const ValueKey(0), vm: vm)
                                 : _BusinessProfileForm2(
-                                    key: const ValueKey(1),
-                                    vm: vm,
-                                  ),
+                                    key: const ValueKey(1), vm: vm),
                           ),
                         ),
                       ],
@@ -97,43 +89,39 @@ class BusinessProfileView extends StatelessWidget {
                 ),
                 ReadaButton.filled(
                   width: double.infinity,
-                  title: vm.currentStep == 0 ? 'Understood' : 'Create profile',
+                  title: vm.currentStep == 0
+                      ? AppStrings.understood
+                      : AppStrings.createProfile,
                   borderRadius: 24,
                   onPressed: () {
-                    if (!_globalKey.currentState!.validate() &&
-                        !_phoneFieldKey.currentState!.validate()) {
+                    if (!_globalKey.currentState!.validate()) {
                       return;
                     }
                     if (vm.currentStep == 0) {
                       vm.goForward();
                       return;
                     }
-                    vm.register();
+                    vm.createBusinessProfile();
                   },
                 ),
                 context.vSpacing8,
                 ReadaButton.outlined(
                   width: double.infinity,
-                  title: 'Back',
+                  title: AppStrings.back,
                   borderRadius: 24,
                   onPressed: () {
                     if (vm.currentStep == 1) return vm.goBackward();
-                    Services.navigationService.goBack();
+                    context.pop();
                   },
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Already a member?'),
+                    const Text(AppStrings.alreadyMember),
                     ReadaButton.text(
-                      title: 'Login',
+                      title: AppStrings.login,
                       onPressed: () {
-                        if (readaAppThemeNotifier.isLight) {
-                          readaAppThemeNotifier.darkMode();
-                        } else {
-                          readaAppThemeNotifier.lightMode();
-                        }
-                        // Services.navigationService.navigateTo(AppRoutes.login);
+                        context.push(AppRoutes.login);
                       },
                     ),
                   ],
@@ -171,12 +159,12 @@ class _BusinessProfileForm1 extends StatelessWidget {
           ),
         ),
         Text(
-          'Create a business profile',
+          AppStrings.createBusinessProfile,
           style: context.textTheme.titleMedium,
         ),
         context.vSpacing16,
         Text(
-          '''A Business profile tells Reada how you’ll be using the app. Whether you’re an Author, a Bookstore, or an Affiliate — your profile helps us customize the tools and experience for your needs. You can create multiple profiles in one account, and switch between them at any time.''',
+          AppStrings.businessProfileDesc,
           style: context.textTheme.bodyLarge,
           textAlign: TextAlign.center,
         ),
@@ -186,61 +174,83 @@ class _BusinessProfileForm1 extends StatelessWidget {
   }
 }
 
-class _BusinessProfileForm2 extends StatelessWidget {
+class _BusinessProfileForm2 extends StatefulWidget {
   const _BusinessProfileForm2({super.key, required this.vm});
 
   final BusinessProfileViewmodel vm;
+
+  @override
+  State<_BusinessProfileForm2> createState() => _BusinessProfileForm2State();
+}
+
+class _BusinessProfileForm2State extends State<_BusinessProfileForm2> {
+  final businessNameTextController = TextEditingController();
+  final emailTextController = TextEditingController();
+  final phoneTextController = TextEditingController();
+  final bioTextController = TextEditingController();
+
+  @override
+  void dispose() {
+    businessNameTextController.dispose();
+    emailTextController.dispose();
+    phoneTextController.dispose();
+    bioTextController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         context.vSpacing16,
-        ImageUploadWidget(size: context.width * 0.3),
+        ImageUploadWidget(
+          size: context.width * 0.3,
+          onSelected: widget.vm.onProfileImageChanged,
+        ),
         context.vSpacing32,
         ProfileTypeSelector(
           context: context,
-          onChanged: (value) {},
+          onChanged: widget.vm.onProfileTypeChanged,
           validator: (value) {
             if (value == null) {
-              return "Please select a profile type";
+              return ErrorStrings.selectProfileType;
             }
             return null;
           },
         ),
         context.vSpacing16,
         PrimaryTextField(
-          title: 'Business name',
-          hintText: 'Enter business name',
-          controller: vm.fNameTextController,
-          onChanged: vm.onFisrtNameChanged,
+          title: AppStrings.businessName,
+          hintText: AppStrings.enterBusinessName,
+          controller: businessNameTextController,
+          onChanged: widget.vm.onbusinessNameChanged,
           validator: FormValidator.validateName,
         ),
         context.vSpacing16,
+        // PrimaryTextField(
+        //   title: AppStrings.businessEmail,
+        //   hintText: AppStrings.enterBusinessEmail,
+        //   controller: emailTextController,
+        //   onChanged: widget.vm.onEmailChanged,
+        //   validator: FormValidator.validateEmail,
+        //   keyboardType: TextInputType.emailAddress,
+        // ),
+        // context.vSpacing16,
+        // CustomPhoneNumberField(
+        //   title: AppStrings.businessPhone,
+        //   fieldKey: _phoneFieldKey,
+        //   controller: phoneTextController,
+        //   initialValue: widget.vm.data.businessPhone,
+        //   onNumberChange: (phone) =>
+        //       widget.vm.onPhoneChanged(phone?.completeNumber),
+        // ),
+        // context.vSpacing16,
         PrimaryTextField(
-          title: 'Business email',
-          hintText: 'Enter business email',
-          controller: vm.emailTextController,
-          onChanged: vm.onEmailChanged,
-          validator: FormValidator.validateEmail,
-          keyboardType: TextInputType.emailAddress,
-        ),
-        context.vSpacing16,
-        CustomPhoneNumberField(
-          title: 'Business phone number',
-          fieldKey: _phoneFieldKey,
-          controller: vm.phoneTextController,
-          initialValue: vm.data.phone,
-          onNumberChange: (phone) => vm.onPhoneChanged(phone?.completeNumber),
-        ),
-        context.vSpacing16,
-        PrimaryTextField(
-          title: 'Bio',
-          hintText: 'Enter a short bio',
-          controller: vm.lNameTextController,
+          title: AppStrings.bio,
+          hintText: AppStrings.enterBio,
+          controller: bioTextController,
           maxLines: 5,
-          onChanged: vm.onLastNameChanged,
-          validator: FormValidator.validateName,
+          onChanged: widget.vm.onBioChanged,
         ),
         context.vSpacing32,
       ],

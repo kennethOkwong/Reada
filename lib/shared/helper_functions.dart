@@ -1,5 +1,8 @@
+import 'dart:developer' show log;
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:reada/shared/constants.dart';
+import 'package:reada/services/api%20service/error_handling/exceptions.dart';
 import 'package:toastification/toastification.dart';
 
 class HelperFunctions {
@@ -11,10 +14,10 @@ class HelperFunctions {
     );
   }
 
-  static void showErrorToast([String? message]) {
+  static void showErrorToast(String message) {
     toastification.show(
       type: ToastificationType.error,
-      title: Text(message ?? Constants.genericError),
+      title: Text(message),
       autoCloseDuration: const Duration(seconds: 5),
     );
   }
@@ -22,12 +25,12 @@ class HelperFunctions {
   // Utility to check required fields
   static T requireField<T>(T? value, String fieldName) {
     if (value == null) {
-      throw FormatException('Missing required field: $fieldName');
+      throw ReadaFormatException(message: 'Missing required field: $fieldName');
     }
     return value;
   }
 
-  T? safeCast<T>(dynamic value) {
+  static T? safeCast<T>(dynamic value) {
     try {
       if (value == null) return null;
 
@@ -58,5 +61,10 @@ class HelperFunctions {
     } catch (_) {
       return null;
     }
+  }
+
+  static void debugLog(dynamic error, StackTrace s) {
+    if (kReleaseMode) return;
+    log(error.toString(), stackTrace: s);
   }
 }

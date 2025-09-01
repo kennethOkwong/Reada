@@ -4,37 +4,32 @@ class BottomNavigationModel {
   BottomNavigationModel({
     required this.icon,
     required this.name,
-    required this.activeIcon,
   });
   String icon;
-  String activeIcon;
   String name;
 }
 
 final dashboardTabs = [
+  // BottomNavigationModel(
+  //   icon: SvgData.icStoreInactive,
+  //   activeIcon: SvgData.icStoreActive,
+  //   name: 'Overview',
+  // ),
   BottomNavigationModel(
-    icon: SvgData.icStoreInactive,
-    activeIcon: SvgData.icStoreActive,
-    name: 'Overview',
+    icon: SvgData.icOrders,
+    name: 'Orders',
   ),
   BottomNavigationModel(
-    icon: SvgData.icStoreInactive,
-    activeIcon: SvgData.icStoreActive,
+    icon: SvgData.icInventory,
     name: 'Inventory',
   ),
   BottomNavigationModel(
-    icon: SvgData.icStoreInactive,
-    activeIcon: SvgData.icStoreActive,
-    name: 'Sales',
-  ),
-  BottomNavigationModel(
-    icon: SvgData.icStoreInactive,
-    activeIcon: SvgData.icStoreActive,
+    icon: SvgData.icStore,
     name: 'Stores',
   ),
-  BottomNavigationModel(
-    icon: SvgData.icStoreInactive,
-    activeIcon: SvgData.icStoreActive,
-    name: 'More',
-  ),
+  // BottomNavigationModel(
+  //   icon: SvgData.icStoreInactive,
+  //   activeIcon: SvgData.icStoreActive,
+  //   name: 'More',
+  // ),
 ];

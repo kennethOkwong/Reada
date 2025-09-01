@@ -1,20 +1,15 @@
-import 'dart:developer';
-import 'package:flutter/material.dart';
+import 'dart:io';
+
 import 'package:reada/app/base/base_vm.dart';
-import 'package:reada/features/authentication/data/dtos/register_request_dto.dart';
+import 'package:reada/features/authentication/data/dtos/create_business_profile_requestdto.dart';
 import 'package:reada/features/authentication/domain/use_cases/auth_use_cases.dart';
 import 'package:reada/features/authentication/presentation/busniess_profile.dart/business_profile_event.dart';
-import 'package:reada/shared/constants.dart';
+import 'package:reada/shared/enums/profile_type_enum.dart';
 
-class BusinessProfileViewmodel extends BaseViewModel<BusinessProfileEvent> {
-  final fNameTextController = TextEditingController();
-  final lNameTextController = TextEditingController();
-  final phoneTextController = TextEditingController();
-  final emailTextController = TextEditingController();
-  final passwordTextController = TextEditingController();
-  final cPasswordTextController = TextEditingController();
-
-  RegisterRequestDto data = RegisterRequestDto.empty();
+class BusinessProfileViewmodel
+    extends BaseViewModel<BusinessProfileEvent, void> {
+  CreateBusinessProfileRequestDto data =
+      CreateBusinessProfileRequestDto.empty();
   int currentStep = 0;
   bool isForward = true;
 
@@ -30,47 +25,45 @@ class BusinessProfileViewmodel extends BaseViewModel<BusinessProfileEvent> {
     notifyListeners();
   }
 
-  void onFisrtNameChanged(String? value) {
-    data = data.copyWith(firstName: value);
+  void onProfileImageChanged(File? value) {
+    data = data.copyWith(profileImage: value);
   }
 
-  void onLastNameChanged(String? value) {
-    data = data.copyWith(lastName: value);
+  void onProfileTypeChanged(ProfileType? value) {
+    data = data.copyWith(profileType: value);
+  }
+
+  void onbusinessNameChanged(String? value) {
+    data = data.copyWith(businessName: value);
   }
 
   void onEmailChanged(String? value) {
-    data = data.copyWith(email: value);
+    data = data.copyWith(businessEmail: value);
   }
 
   void onPhoneChanged(String? value) {
-    data = data.copyWith(phone: value);
+    data = data.copyWith(businessPhone: value);
   }
 
-  void onPasswordChanged(String? value) {
-    data = data.copyWith(password: value);
+  void onBioChanged(String? value) {
+    data = data.copyWith(bio: value);
   }
 
-  void onConfirmPasswordChanged(String? value) {
-    data = data.copyWith(confirmPassword: value);
-  }
-
-  Future<void> register() async {
-    try {
-      startLoader();
-      var result = await registerUseCase.call(data);
-      stopLoader();
-      result.when(
-        success: (data) {
-          emitEvent(const BusinessProfileEvent.success());
-        },
-        failure: (message) {
-          emitEvent(BusinessProfileEvent.failure(message));
-        },
-      );
-    } catch (error, s) {
-      log(error.toString(), stackTrace: s);
-      stopLoader();
-      emitEvent(BusinessProfileEvent.failure(Constants.genericError));
-    }
+  Future<void> createBusinessProfile() async {
+    setLoading();
+    var result = await createBusinessProfileUsecase.call(data);
+    setIdle();
+    result.when(
+      success: (data, message) {
+        if (data == null) {
+          emitEvent(const BusinessProfileEvent.navigateToLogin());
+          return;
+        }
+        emitEvent(const BusinessProfileEvent.navigateToDashborad());
+      },
+      failure: (exception) {
+        emitEvent(BusinessProfileEvent.failure(exception.toString()));
+      },
+    );
   }
 }

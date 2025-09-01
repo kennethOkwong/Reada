@@ -1,41 +1,28 @@
-class ApiResponse<T> {
+import 'package:reada/services/api%20service/error_handling/exceptions.dart';
+import 'package:reada/shared/typedefs.dart';
+
+class ApiResponse {
+  bool isSuccessful;
+  dynamic code;
+  dynamic data;
+  final String? message;
+
   ApiResponse({
     required this.isSuccessful,
     this.code,
     this.data,
-    this.others,
-    this.isTimeout,
     this.message,
-    this.errorType,
-    this.errorCode,
-    this.type,
   });
 
-  factory ApiResponse.fromJson(Map<String, dynamic> json) {
+  factory ApiResponse.fromJson(JSON json) {
     return ApiResponse(
       message: json['message'],
-      errorType: json['type'],
-      errorCode: json['code'],
       isSuccessful: json['status'] ?? false,
-      data: json['data'] as T?,
+      data: json['data'],
     );
   }
-  factory ApiResponse.timout() {
-    return ApiResponse(
-      isSuccessful: false,
-      others: 'timeout',
-      isTimeout: true,
-      message: 'Error occured. Please try again later',
-      data: null,
-    );
+
+  ReadaFalseApiResponseException toReadaFalseApiResponseException() {
+    return ReadaFalseApiResponseException(message: message, statusCode: code);
   }
-  dynamic code;
-  T? data;
-  dynamic others;
-  bool isSuccessful;
-  final bool? isTimeout;
-  final String? message;
-  final String? errorType;
-  final String? errorCode;
-  final String? type;
 }

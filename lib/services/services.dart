@@ -1,6 +1,6 @@
 import 'package:reada/app/locator.dart';
-import 'package:reada/services/navigation%20service/navigation_service.dart';
+import 'package:reada/services/api%20service/api.dart';
 
 class Services {
-  static NavigationService navigationService = locator<NavigationService>();
+  static Api apiService = locator<Api>();
 }

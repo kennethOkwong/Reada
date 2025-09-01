@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:reada/app/app_strings/app_strings.dart';
 import 'package:reada/app/base/base_ui.dart';
 import 'package:reada/features/onboarding/landing_view/landing_view_viewmodel.dart';
 import 'package:reada/features/onboarding/landing_view/landing_events.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
-import 'package:reada/services/services.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
@@ -14,65 +15,64 @@ class LandingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<LandingScreenViewmodel, LandingEvents>(
+    return BaseView<LandingScreenViewmodel, LandingEvents, void>(
       viewModel: LandingScreenViewmodel(),
       builder: (context, model, child) {
         return SafeArea(
           child: Scaffold(
-              body: Padding(
-            padding: Constants.pagePadding(context),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: context.spacing32),
-                    height: context.width * 0.8,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                        image: AssetImage(AppImages.landingImage),
-                        fit: BoxFit.cover,
+            body: Padding(
+              padding: Constants.pagePadding(context),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: context.spacing32),
+                      height: context.width * 0.8,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: AssetImage(AppImages.landingImage),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  context.vSpacing8,
-                  Text(
-                    'DISCOVER YOUR BEST \nBOOKS HERE',
-                    textAlign: TextAlign.center,
-                    style: context.textTheme.titleSmall,
-                  ),
-                  context.vSpacing20,
-                  Text(
-                    'Explore the exciting books based on interest and studies',
-                    textAlign: TextAlign.center,
-                    style: context.textTheme.bodyMedium,
-                  ),
-                  context.vSpacing24,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ReadaButton.filled(
-                        title: 'Sign up',
-                        onPressed: () {
-                          Services.navigationService
-                              .navigateTo(AppRoutes.businessProfile);
-                        },
-                      ),
-                      context.hSpacing24,
-                      ReadaButton.outlined(
-                        title: 'Login',
-                        onPressed: () {
-                          Services.navigationService
-                              .navigateTo(AppRoutes.login);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                    context.vSpacing8,
+                    Text(
+                      AppStrings.onboardingHeadline,
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.titleSmall,
+                    ),
+                    context.vSpacing20,
+                    Text(
+                      AppStrings.onboardingSubtitle,
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.bodyMedium,
+                    ),
+                    context.vSpacing24,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ReadaButton.filled(
+                          title: AppStrings.register,
+                          onPressed: () {
+                            context.push(AppRoutes.register);
+                          },
+                        ),
+                        context.hSpacing24,
+                        ReadaButton.outlined(
+                          title: AppStrings.login,
+                          onPressed: () {
+                            context.push(AppRoutes.login);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          )),
+          ),
         );
       },
     );

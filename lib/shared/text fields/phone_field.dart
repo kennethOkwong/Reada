@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
-import 'package:reada/app/theme/color_scheme.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
 
 class CustomPhoneNumberField extends StatefulWidget {
@@ -101,7 +99,6 @@ class _CustomPhoneNumberFieldState extends State<CustomPhoneNumberField> {
       key: widget.fieldKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (phone) {
-        log("Validating phone: $phone");
         if (phone == null || phone.number.isEmpty) {
           return 'Please enter a valid phone number';
         }
