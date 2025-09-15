@@ -1,26 +1,29 @@
-import 'package:reada/services/api%20service/api_response.dart';
-
-import '../models/user_model.dart';
+import 'package:reada/app/result.dart';
+import 'package:reada/features/authentication/data/dtos/create_business_profile_requestdto.dart';
+import 'package:reada/features/authentication/data/dtos/login_request_dto.dart';
+import 'package:reada/features/authentication/data/dtos/register_request_dto.dart';
+import 'package:reada/features/authentication/data/dtos/reset_password_request_dto.dart';
+import 'package:reada/features/authentication/data/dtos/send_code_request_dto.dart';
+import 'package:reada/features/authentication/data/dtos/verify_code_request_dto.dart';
+import 'package:reada/features/authentication/domain/entities/user.dart';
 
 abstract class AuthRepository {
-  Future<ApiResponse> login({
-    required String email,
-    required String password,
-  });
-  Future<ApiResponse> register({
-    required String email,
-    required String phone,
-    required String password,
-  });
+  Future<Success<User>> login({required LoginRequestDto data});
+  Future<Success<void>> register({required RegisterRequestDto data});
 
-  Future<ApiResponse> sendOTP(String email);
+  Future<Success<void>> sendOTP(SendCodeRequestDto data);
 
-  Future<ApiResponse> verifyOTP({
-    required String pinId,
-    required String otp,
-  });
+  Future<Success<void>> verifyOTP({required VerifyCodeRequestDto data});
 
-  Future<ApiResponse> resetPassword({required String newPassword});
+  Future<Success<void>> resetPassword({required ResetPasswordRequestDto data});
 
-  Future<ApiResponse> getUser();
+  Future<Success<User>> getUserFromApi();
+  Future<Success<User>> getUserFromLocalStorage();
+  Future<Success<void>> saveUserToLocalStorage(User user);
+
+  Future<Success<void>> createBusinesProfile(
+      CreateBusinessProfileRequestDto data);
+
+  Future<Success<void>> clearLocalStorage();
+  Future<Success<void>> clearLocalStorageAuth();
 }

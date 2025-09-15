@@ -1,13 +1,16 @@
 import 'package:get_it/get_it.dart';
 import 'package:reada/app/flavour/flavor_config.dart';
+import 'package:reada/features/authentication/data/data_source/remote_source/auth_remote_data_source.dart';
+import 'package:reada/features/authentication/data/repository_impl/auth_repository_impl.dart';
+import 'package:reada/features/authentication/domain/repository/auth_repository.dart';
 import 'package:reada/features/authentication/presentation/forgot%20password/forgot_password_viewmodel.dart';
-import 'package:reada/features/authentication/presentation/landing%20screen/landing_screen_viewmodel.dart';
-import 'package:reada/features/authentication/presentation/login%20screen/login_viewmodel.dart';
-import 'package:reada/features/authentication/presentation/register%20screen/register_viewmodel.dart';
+import 'package:reada/features/authentication/presentation/login_view/login_viewmodel.dart';
+import 'package:reada/features/onboarding/landing_view/landing_view_viewmodel.dart';
+import 'package:reada/features/authentication/presentation/register_view/register_viewmodel.dart';
 import 'package:reada/features/authentication/presentation/verify%20code/verify_code_viewmodel.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_viewmodel.dart';
-import 'package:reada/services/navigation%20service/navigation_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:reada/features/stores/presentation/stores/stores_vm.dart';
+import 'package:reada/services/api%20service/api.dart';
 
 final locator = GetIt.instance;
 
@@ -20,8 +23,7 @@ Future<void> setUpLocator(AppFlavorConfig config) async {
 }
 
 Future<void> _registerServices() async {
-  locator..registerLazySingleton<NavigationService>(NavigationService.new);
-  // ..registerLazySingleton<Api>(Api.new)
+  locator.registerLazySingleton<Api>(Api.new);
 }
 
 Future<void> _registerViewmodels() async {
@@ -31,13 +33,15 @@ Future<void> _registerViewmodels() async {
     ..registerFactory<RegisterViewmodel>(RegisterViewmodel.new)
     ..registerFactory<ForgotPasswordViewmodel>(ForgotPasswordViewmodel.new)
     ..registerFactory<VerifyCodeViewmodel>(VerifyCodeViewmodel.new)
+    ..registerFactory<StoresViewmodel>(StoresViewmodel.new)
     ..registerFactory<DashboardViewmodel>(DashboardViewmodel.new);
 }
 
 Future<void> _registerExternalDependencies(AppFlavorConfig config) async {
   locator.registerLazySingleton<AppFlavorConfig>(() => config);
-  final instance = await SharedPreferences.getInstance();
-  locator.registerLazySingleton<SharedPreferences>(() => instance);
 }
 
-Future<void> _registerRepositories() async {}
+Future<void> _registerRepositories() async {
+  locator.registerFactory<AuthRepository>(
+      () => AuthRepositoryImpl(AuthRemoteDataSource()));
+}

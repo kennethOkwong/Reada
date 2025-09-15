@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:reada/app/app_strings/app_strings.dart';
+import 'package:reada/app/base/base_ui.dart';
+import 'package:reada/features/onboarding/landing_view/landing_view_viewmodel.dart';
+import 'package:reada/features/onboarding/landing_view/landing_events.dart';
+import 'package:reada/services/navigation%20service/app_routes.dart';
+import 'package:reada/shared/buttons/cutsom_button.dart';
+import 'package:reada/shared/constants.dart';
+import 'package:reada/shared/extensions/build_context_extension.dart';
+import 'package:reada/shared/app%20images/images.dart';
+
+class LandingView extends StatelessWidget {
+  const LandingView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseView<LandingScreenViewmodel, LandingEvents, void>(
+      viewModel: LandingScreenViewmodel(),
+      builder: (context, model, child) {
+        return SafeArea(
+          child: Scaffold(
+            body: Padding(
+              padding: Constants.pagePadding(context),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: context.spacing32),
+                      height: context.width * 0.8,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: AssetImage(AppImages.landingImage),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    context.vSpacing8,
+                    Text(
+                      AppStrings.onboardingHeadline,
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.normal,
+                        wordSpacing: 2,
+                        letterSpacing: 1,
+                        height: 1.7,
+                      ),
+                    ),
+                    context.vSpacing20,
+                    Text(
+                      AppStrings.onboardingSubtitle,
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.bodyMedium,
+                    ),
+                    context.vSpacing24,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ReadaButton.filled(
+                          title: AppStrings.register,
+                          onPressed: () {
+                            context.push(AppRoutes.register);
+                          },
+                        ),
+                        context.hSpacing24,
+                        ReadaButton.outlined(
+                          title: AppStrings.login,
+                          onPressed: () {
+                            context.push(AppRoutes.login);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

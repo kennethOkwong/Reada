@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:reada/app/theme/colors.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
 
 /// The [PrimaryTextField] is a versatile and customizable Flutter widget that simplifies
@@ -61,7 +60,7 @@ class PrimaryTextField extends StatefulWidget {
     this.hintText,
     this.controller,
     this.obscureText = false,
-    this.autoValidate = false,
+    this.autoValidate = true,
     this.isPassword = false,
     this.validator,
     // this.validatorRecord,
@@ -83,6 +82,7 @@ class PrimaryTextField extends StatefulWidget {
     this.prefixIcon,
     this.backgroundColor,
     this.hintStyle,
+    this.focusNode,
   });
 
   final TextEditingController? controller;
@@ -106,11 +106,12 @@ class PrimaryTextField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final List<TextInputFormatter>? inputFormatters;
   // final String? Function(String?)? validator;
-  final (bool, String?)? Function(String?)? validator;
+  final String? Function(String?)? validator;
   final void Function(String?)? onChanged;
   final void Function()? onEditingComplete;
   final void Function(String?)? onSubmitted;
   final Color? backgroundColor;
+  final FocusNode? focusNode;
   final TextStyle? hintStyle;
 
   @override
@@ -162,7 +163,8 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
             Expanded(
               child: Theme(
                 data: ThemeData(
-                  disabledColor: Colors.grey.shade300,
+                  disabledColor:
+                      context.colorScheme.onSurface.withValues(alpha: 0.5),
                 ),
                 child: Container(
                   color: !widget.enabled
@@ -174,14 +176,11 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
                     onTapOutside: (_) =>
                         FocusManager.instance.primaryFocus?.unfocus(),
                     controller: widget.controller,
+                    focusNode: widget.focusNode,
                     obscureText: obscureText,
                     initialValue: widget.initialText,
-                    cursorColor: AppColors.primaryBlue,
-                    validator: (val) {
-                      final response = widget.validator?.call(val);
-                      hasError = response?.$1 ?? false;
-                      return response?.$2;
-                    },
+                    cursorColor: context.colorScheme.primary,
+                    validator: widget.validator,
                     inputFormatters: widget.inputFormatters,
                     enabled: widget.enabled,
                     onChanged: (val) {
@@ -196,8 +195,9 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
                     cursorHeight: 20,
                     style: context.textTheme.labelMedium?.copyWith(
                       color: widget.enabled
-                          ? Colors.grey.shade900
-                          : Colors.grey.shade500,
+                          ? context.colorScheme.onSurface
+                          : context.colorScheme.onSurface
+                              .withValues(alpha: 0.3),
                     ),
                     decoration: InputDecoration(
                       constraints: const BoxConstraints(
@@ -255,11 +255,12 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
                           color: Colors.grey,
                         ),
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(8),
                         ),
-                        borderSide: BorderSide(color: AppColors.primaryBlue),
+                        borderSide:
+                            BorderSide(color: context.colorScheme.primary),
                       ),
                     ),
                   ),

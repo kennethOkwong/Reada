@@ -23,8 +23,11 @@ class CustomPrinter extends LogPrinter {
     final messageStr = event.message.toString();
     final errorStr = event.error?.toString() ?? '';
     final stackTraceStr = event.stackTrace?.toString() ?? '';
-    return [
-      color!('$emoji $className - $messageStr $errorStr $stackTraceStr'),
-    ];
+    if (color != null) {
+      return [
+        color('$emoji $className - $messageStr $errorStr $stackTraceStr')
+      ];
+    }
+    return ['$emoji $className - $messageStr $errorStr $stackTraceStr'];
   }
 }
