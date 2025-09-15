@@ -11,6 +11,7 @@ import 'package:reada/features/authentication/presentation/register_view/registe
 import 'package:reada/features/dashboard/presentation/dashboard_view.dart';
 import 'package:reada/features/onboarding/landing_view/landing_view.dart';
 import 'package:reada/features/onboarding/splash_view.dart';
+import 'package:reada/features/stores/presentation/stores/add_store/add_store.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
 
 class AppRouter {
@@ -59,6 +60,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.businessProfile,
         builder: (context, state) => const BusinessProfileView(),
+      ),
+      GoRoute(
+        path: AppRoutes.addStore,
+        builder: (context, state) => const AddStoreView(),
       ),
     ],
     errorBuilder: (context, state) => const Scaffold(

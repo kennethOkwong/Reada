@@ -9,4 +9,5 @@ class AppRoutes {
   static const String enterCode = '/enter-code';
   static const String resetPassword = '/reset-password';
   static const String dashboard = '/dashboard';
+  static const String addStore = '/add-store';
 }

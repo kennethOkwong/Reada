@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reada/app/theme/theme.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
 
-enum ButtonType { filled, outlined, text }
+enum ButtonType { filled, outlined, text, elavated }
 
 class ReadaButton extends StatelessWidget {
   const ReadaButton.filled({
@@ -31,6 +31,15 @@ class ReadaButton extends StatelessWidget {
     this.width,
   })  : type = ButtonType.text,
         borderRadius = 0;
+
+  const ReadaButton.elevated({
+    super.key,
+    required this.title,
+    required this.onPressed,
+    this.borderRadius,
+    this.enabled = true,
+    this.width,
+  }) : type = ButtonType.elavated;
 
   final ButtonType type;
   final String title;
@@ -79,6 +88,28 @@ class ReadaButton extends StatelessWidget {
           child: Text(
             title,
             style: context.textTheme.labelMedium!.copyWith(color: Colors.white),
+          ),
+        ),
+      );
+    }
+    if (type == ButtonType.elavated) {
+      return Container(
+        width: width,
+        child: ElevatedButton(
+          onPressed: () {
+            if (!enabled) return;
+            onPressed();
+          },
+          style: FilledButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(borderRadius ?? 32),
+            ),
+          ),
+          child: Text(
+            title,
+            style: context.textTheme.labelMedium!.copyWith(
+              color: context.colorScheme.onSurface,
+            ),
           ),
         ),
       );

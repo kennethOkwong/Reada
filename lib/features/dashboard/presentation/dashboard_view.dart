@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:reada/app/base/base_ui.dart';
+import 'package:reada/app/theme/theme.dart';
+import 'package:reada/features/authentication/domain/entities/user.dart';
 import 'package:reada/features/dashboard/domain/models/bottom_nav_model.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_event.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_viewmodel.dart';
+import 'package:reada/features/dashboard/presentation/widgets/side_drawer.dart';
 import 'package:reada/features/stores/presentation/stores/stores_view.dart';
 import 'package:reada/shared/app%20images/svg_icons.dart';
+import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/custom_app_bar.dart';
+import 'package:reada/shared/empty_state.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
+import 'package:reada/shared/state_screen.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -26,49 +32,83 @@ class DashboardView extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: IndexedStack(
-                        index: model.currentIndex,
-                        children: [
-                          Scaffold(
-                            appBar: const CustomAppBar(
-                              title: 'Orders',
-                            ),
-                            body: EmptyState(
-                              title: "No Data",
-                              message:
-                                  "You don’t have any orders yet.\nStart by adding a local order",
-                              icon: Icons.history,
-                              buttonText: "Add order",
-                              onButtonPressed: () {
-                                // handle action
-                              },
-                            ),
+                child: Scaffold(
+                  appBar: CustomAppBar(
+                    title: model.appBarTitle,
+                    centerTitle: false,
+                    titleStyle: context.textTheme.titleLarge,
+                  ),
+                  drawer: SideDrawer(
+                    user: User(
+                        id: 1,
+                        email: 'okwongkenneth36@gmail.com',
+                        firstName: 'Kenneth',
+                        lastName: 'Okwong',
+                        phoneNumber: '',
+                        userType: '',
+                        isVerified: true,
+                        isActive: true,
+                        dateJoined: '',
+                        accessToken: '',
+                        refreshToken: '',
+                        businessProfiles: []),
+                    onLogout: () {
+                      // Handle logout
+                    },
+                  ),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () {
+                      readaAppThemeNotifier.darkMode();
+                    },
+                    child: const Icon(Icons.add),
+                  ),
+                  body: Padding(
+                    padding: Constants.pagePadding(context),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: IndexedStack(
+                            index: model.currentIndex,
+                            children: [
+                              StateScreen(
+                                isLoading: model.isLoading,
+                                hasError: model.hasError,
+                                isEmpty: true,
+                                empty: EmptyState(
+                                  title: "No Data",
+                                  message:
+                                      "You don’t have any orders yet.\nStart by creating a local order!",
+                                  buttonText: "Create local order",
+                                  onButtonPressed: () {
+                                    // handle action
+                                  },
+                                ),
+                                data: const Text('Order list'),
+                              ),
+                              StateScreen(
+                                isLoading: model.isLoading,
+                                hasError: model.hasError,
+                                isEmpty: true,
+                                empty: EmptyState(
+                                  title: "No Data",
+                                  message:
+                                      "You don’t have any inventories yet.\nStart by adding one!",
+                                  buttonText: "Add inventory",
+                                  onButtonPressed: () {
+                                    // handle action
+                                  },
+                                ),
+                                data: const Text('Inventory list'),
+                              ),
+                              const StoresView(),
+                            ],
                           ),
-                          Scaffold(
-                            appBar: const CustomAppBar(
-                              title: 'Inventory',
-                            ),
-                            body: EmptyState(
-                              title: "No Data",
-                              message:
-                                  "You don’t have any inventories yet.\nStart by adding one!",
-                              icon: Icons.history,
-                              buttonText: "Add inventory",
-                              onButtonPressed: () {
-                                // handle action
-                              },
-                            ),
-                          ),
-                          const StoresView(),
-                        ],
-                      ),
-                    ),
+                        ),
 
-                    // Bottom Nav Bar
-                  ],
+                        // Bottom Nav Bar
+                      ],
+                    ),
+                  ),
                 ),
               ),
               Container(

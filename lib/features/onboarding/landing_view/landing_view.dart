@@ -41,7 +41,12 @@ class LandingView extends StatelessWidget {
                     Text(
                       AppStrings.onboardingHeadline,
                       textAlign: TextAlign.center,
-                      style: context.textTheme.titleSmall,
+                      style: context.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.normal,
+                        wordSpacing: 2,
+                        letterSpacing: 1,
+                        height: 1.7,
+                      ),
                     ),
                     context.vSpacing20,
                     Text(
