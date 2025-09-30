@@ -68,7 +68,7 @@ class LandingView extends StatelessWidget {
                         ReadaButton.outlined(
                           title: AppStrings.login,
                           onPressed: () {
-                            context.push(AppRoutes.login);
+                            context.push(AppRoutes.dashboard);
                           },
                         ),
                       ],

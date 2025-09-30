@@ -6,4 +6,5 @@ class AppImages {
   static String logoLongOrange = '${_basePath}logo_long_orange.png';
   static String logoLongWhite = '${_basePath}logo_long_white.png';
   static String bookStore = '${_basePath}bookstore.png';
+  static String bookCase = '${_basePath}bookcase.png';
 }

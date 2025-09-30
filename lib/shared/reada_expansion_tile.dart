@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reada/shared/extensions/build_context_extension.dart';
 
 class ReadaExpansionTile extends StatelessWidget {
   final String title;
@@ -49,14 +50,14 @@ class ReadaExpansionTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           childrenPadding:
-              const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
 
           // ✅ Custom trailing with actions + expand/collapse icon
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               ...actions, // your custom widgets (buttons/icons etc.)
-              const SizedBox(width: 8),
+              context.hSpacing8,
               _ExpansionIcon(
                 expandedIcon: expandedIcon,
                 collapsedIcon: collapsedIcon,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reada/app/theme/theme.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
 
-enum ButtonType { filled, outlined, text, elavated }
+enum ButtonType { filled, outlined, text, elavated, icon }
 
 class ReadaButton extends StatelessWidget {
   const ReadaButton.filled({
@@ -12,7 +12,8 @@ class ReadaButton extends StatelessWidget {
     this.borderRadius,
     this.enabled = true,
     this.width,
-  }) : type = ButtonType.filled;
+  })  : type = ButtonType.filled,
+        icon = null;
 
   const ReadaButton.outlined({
     super.key,
@@ -21,7 +22,8 @@ class ReadaButton extends StatelessWidget {
     this.borderRadius,
     this.enabled = true,
     this.width,
-  }) : type = ButtonType.outlined;
+  })  : type = ButtonType.outlined,
+        icon = null;
 
   const ReadaButton.text({
     super.key,
@@ -30,7 +32,8 @@ class ReadaButton extends StatelessWidget {
     this.enabled = true,
     this.width,
   })  : type = ButtonType.text,
-        borderRadius = 0;
+        borderRadius = 0,
+        icon = null;
 
   const ReadaButton.elevated({
     super.key,
@@ -39,14 +42,26 @@ class ReadaButton extends StatelessWidget {
     this.borderRadius,
     this.enabled = true,
     this.width,
-  }) : type = ButtonType.elavated;
+  })  : type = ButtonType.elavated,
+        icon = null;
+
+  const ReadaButton.icon({
+    super.key,
+    required this.icon,
+    required this.onPressed,
+    this.enabled = true,
+    this.width,
+  })  : type = ButtonType.icon,
+        title = null,
+        borderRadius = null;
 
   final ButtonType type;
-  final String title;
+  final String? title;
   final VoidCallback onPressed;
   final double? borderRadius;
   final bool enabled;
   final double? width;
+  final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +80,7 @@ class ReadaButton extends StatelessWidget {
             ),
           ),
           child: Text(
-            title,
+            title!,
             style: context.textTheme.labelMedium,
           ),
         ),
@@ -86,14 +101,14 @@ class ReadaButton extends StatelessWidget {
             ),
           ),
           child: Text(
-            title,
+            title!,
             style: context.textTheme.labelMedium!.copyWith(color: Colors.white),
           ),
         ),
       );
     }
     if (type == ButtonType.elavated) {
-      return Container(
+      return SizedBox(
         width: width,
         child: ElevatedButton(
           onPressed: () {
@@ -106,13 +121,43 @@ class ReadaButton extends StatelessWidget {
             ),
           ),
           child: Text(
-            title,
+            title!,
             style: context.textTheme.labelMedium!.copyWith(
               color: context.colorScheme.onSurface,
             ),
           ),
         ),
       );
+    }
+
+    if (type == ButtonType.icon) {
+      return SizedBox(
+          width: width,
+          child: IconButton(
+            icon: icon!,
+            onPressed: () {
+              if (!enabled) return;
+              onPressed();
+            },
+          )
+          // ElevatedButton(
+          //   onPressed: () {
+          //     if (!enabled) return;
+          //     onPressed();
+          //   },
+          //   style: FilledButton.styleFrom(
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(borderRadius ?? 32),
+          //     ),
+          //   ),
+          //   child: Text(
+          //     title,
+          //     style: context.textTheme.labelMedium!.copyWith(
+          //       color: context.colorScheme.onSurface,
+          //     ),
+          //   ),
+          // ),
+          );
     }
     return Container(
       width: width,
@@ -123,7 +168,7 @@ class ReadaButton extends StatelessWidget {
           onPressed();
         },
         child: Text(
-          title,
+          title!,
           style: context.textTheme.labelMedium!.copyWith(
             color: readaAppThemeNotifier.isLight
                 ? context.colorScheme.primary

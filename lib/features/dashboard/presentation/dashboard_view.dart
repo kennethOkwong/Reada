@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reada/app/base/base_ui.dart';
-import 'package:reada/app/theme/theme.dart';
 import 'package:reada/features/authentication/domain/entities/user.dart';
 import 'package:reada/features/dashboard/domain/models/bottom_nav_model.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_event.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_viewmodel.dart';
 import 'package:reada/features/dashboard/presentation/widgets/side_drawer.dart';
-import 'package:reada/features/stores/presentation/stores/stores_view.dart';
+import 'package:reada/features/inventory/presentation/inventory_list/invenory_list_view.dart';
+import 'package:reada/features/stores/presentation/stores_list/stores_view.dart';
+import 'package:reada/services/navigation%20service/app_routes.dart';
 import 'package:reada/shared/app%20images/svg_icons.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/custom_app_bar.dart';
@@ -58,7 +60,8 @@ class DashboardView extends StatelessWidget {
                   ),
                   floatingActionButton: FloatingActionButton(
                     onPressed: () {
-                      readaAppThemeNotifier.darkMode();
+                      // readaAppThemeNotifier.darkMode();
+                      context.push(AppRoutes.addStore);
                     },
                     child: const Icon(Icons.add),
                   ),
@@ -85,21 +88,7 @@ class DashboardView extends StatelessWidget {
                                 ),
                                 data: const Text('Order list'),
                               ),
-                              StateScreen(
-                                isLoading: model.isLoading,
-                                hasError: model.hasError,
-                                isEmpty: true,
-                                empty: EmptyState(
-                                  title: "No Data",
-                                  message:
-                                      "You don’t have any inventories yet.\nStart by adding one!",
-                                  buttonText: "Add inventory",
-                                  onButtonPressed: () {
-                                    // handle action
-                                  },
-                                ),
-                                data: const Text('Inventory list'),
-                              ),
+                              const InventoryListView(),
                               const StoresView(),
                             ],
                           ),

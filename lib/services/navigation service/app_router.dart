@@ -9,9 +9,14 @@ import 'package:reada/features/authentication/presentation/forgot password/enter
 import 'package:reada/features/authentication/presentation/forgot password/reset_password_view.dart';
 import 'package:reada/features/authentication/presentation/register_view/register_view.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_view.dart';
+import 'package:reada/features/inventory/presentation/add_inventory/add_invemtory.dart';
+import 'package:reada/features/inventory/presentation/update_inventory/update_inventory_view.dart';
 import 'package:reada/features/onboarding/landing_view/landing_view.dart';
 import 'package:reada/features/onboarding/splash_view.dart';
-import 'package:reada/features/stores/presentation/stores/add_store/add_store.dart';
+import 'package:reada/features/stores/presentation/add_store/add_store.dart';
+import 'package:reada/features/stores/presentation/store_details/book_details_view.dart';
+import 'package:reada/features/stores/presentation/store_details/shelves_view.dart';
+import 'package:reada/features/stores/presentation/store_details/store_details_view.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
 
 class AppRouter {
@@ -65,6 +70,38 @@ class AppRouter {
         path: AppRoutes.addStore,
         builder: (context, state) => const AddStoreView(),
       ),
+      GoRoute(
+        path: AppRoutes.storeDetails,
+        builder: (context, state) {
+          final store = state.extra as String;
+          return StoreDetailsView(store: store);
+        },
+      ),
+      GoRoute(
+          path: AppRoutes.shelves,
+          builder: (context, state) {
+            return ShelvesView(
+              bookcase: state.extra as String,
+            );
+          }),
+      GoRoute(
+          path: AppRoutes.bookDetails,
+          builder: (context, state) {
+            final book = state.extra as String;
+            return BookDetailsView(book: book);
+          }),
+      GoRoute(
+        path: AppRoutes.addInventory,
+        builder: (context, state) {
+          return const AddInventoryView();
+        },
+      ),
+      GoRoute(
+          path: AppRoutes.updateInventory,
+          builder: (context, state) {
+            final item = state.extra as String;
+            return UpdateInventoryView(inventory: item);
+          }),
     ],
     errorBuilder: (context, state) => const Scaffold(
       body: Center(

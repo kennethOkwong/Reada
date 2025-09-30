@@ -1,9 +1,9 @@
 import 'package:reada/app/base/base_vm.dart';
 import 'package:reada/features/authentication/data/dtos/login_request_dto.dart';
 import 'package:reada/features/authentication/domain/use_cases/auth_use_cases.dart';
-import 'package:reada/features/stores/presentation/stores/stores_event.dart';
+import 'package:reada/features/inventory/presentation/inventory_list/inventory_event.dart';
 
-class StoresViewmodel extends BaseViewModel<StoreEvent, List<String>> {
+class InventoryViewmodel extends BaseViewModel<InventoryEvent, List<String>> {
   LoginRequestDto data = LoginRequestDto.empty();
 
   void onEmailChanged(String? value) {
@@ -20,10 +20,10 @@ class StoresViewmodel extends BaseViewModel<StoreEvent, List<String>> {
     setIdle();
     result.when(
       success: (data, message) {
-        emitEvent(StoreEvent.success(data!));
+        emitEvent(InventoryEvent.success(data!));
       },
       failure: (exception) {
-        emitEvent(StoreEvent.failure(exception.toString()));
+        emitEvent(InventoryEvent.failure(exception.toString()));
       },
     );
   }

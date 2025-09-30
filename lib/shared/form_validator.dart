@@ -1,4 +1,12 @@
 class FormValidator {
+  static String? validateRequired(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'This field is required';
+    }
+
+    return null;
+  }
+
   static String? validateEmail(String? email) {
     if (email == null || email.isEmpty) {
       return 'Email address is required';
@@ -18,6 +26,17 @@ class FormValidator {
       return 'Please enter a valid phone number';
     }
 
+    return null;
+  }
+
+  static String? validateIntegerIncrementField(int value,
+      [int? min, int? max]) {
+    if (min != null && value < min) {
+      return 'Value must not be below $min';
+    }
+    if (max != null && value > max) {
+      return 'Value must not be above $max';
+    }
     return null;
   }
 

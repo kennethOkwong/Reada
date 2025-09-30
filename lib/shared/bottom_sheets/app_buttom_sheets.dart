@@ -1,8 +1,9 @@
 // lib/core/widgets/app_bottom_sheet.dart
 import 'package:flutter/material.dart';
+import 'package:reada/shared/buttons/cutsom_button.dart';
 
 class AppBottomSheet {
-  static Future<T?> show<T>({
+  static Future<T?> modalBottomSheet<T>({
     required BuildContext context,
     required String title,
     required Widget child,
@@ -32,7 +33,7 @@ class AppBottomSheet {
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
-                      IconButton(
+                      ReadaButton.icon(
                         icon: const Icon(Icons.close),
                         onPressed: () => Navigator.pop(context),
                       ),

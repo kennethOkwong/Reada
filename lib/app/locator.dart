@@ -9,7 +9,7 @@ import 'package:reada/features/onboarding/landing_view/landing_view_viewmodel.da
 import 'package:reada/features/authentication/presentation/register_view/register_viewmodel.dart';
 import 'package:reada/features/authentication/presentation/verify%20code/verify_code_viewmodel.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_viewmodel.dart';
-import 'package:reada/features/stores/presentation/stores/stores_vm.dart';
+import 'package:reada/features/stores/presentation/stores_list/stores_vm.dart';
 import 'package:reada/services/api%20service/api.dart';
 
 final locator = GetIt.instance;

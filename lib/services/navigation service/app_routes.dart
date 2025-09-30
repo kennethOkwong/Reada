@@ -10,4 +10,9 @@ class AppRoutes {
   static const String resetPassword = '/reset-password';
   static const String dashboard = '/dashboard';
   static const String addStore = '/add-store';
+  static const String storeDetails = '/store-details';
+  static const String shelves = '/shelves';
+  static const String bookDetails = '/book-details';
+  static const String addInventory = '/add-inventory';
+  static const String updateInventory = '/update-inventory';
 }

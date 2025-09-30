@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
 
 /// The [PrimaryTextField] is a versatile and customizable Flutter widget that simplifies
@@ -213,7 +214,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
                       //   minWidth: 32,
                       // ).r,
                       suffixIcon: widget.isPassword
-                          ? IconButton(
+                          ? ReadaButton.icon(
                               onPressed: updateVisibility,
                               icon: Icon(
                                 obscureText
