@@ -9,6 +9,9 @@ import 'package:reada/features/onboarding/landing_view/landing_view_viewmodel.da
 import 'package:reada/features/authentication/presentation/register_view/register_viewmodel.dart';
 import 'package:reada/features/authentication/presentation/verify%20code/verify_code_viewmodel.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_viewmodel.dart';
+import 'package:reada/features/stores/data/data_source/local_datasource/store_local_datasource.dart';
+import 'package:reada/features/stores/data/repo_impl/store_repo_impl.dart';
+import 'package:reada/features/stores/domain/repository/store_repo.dart';
 import 'package:reada/features/stores/presentation/stores_list/stores_vm.dart';
 import 'package:reada/services/api%20service/api.dart';
 
@@ -33,7 +36,7 @@ Future<void> _registerViewmodels() async {
     ..registerFactory<RegisterViewmodel>(RegisterViewmodel.new)
     ..registerFactory<ForgotPasswordViewmodel>(ForgotPasswordViewmodel.new)
     ..registerFactory<VerifyCodeViewmodel>(VerifyCodeViewmodel.new)
-    ..registerFactory<StoresViewmodel>(StoresViewmodel.new)
+    ..registerLazySingleton<StoresViewmodel>(StoresViewmodel.new)
     ..registerFactory<DashboardViewmodel>(DashboardViewmodel.new);
 }
 
@@ -42,6 +45,9 @@ Future<void> _registerExternalDependencies(AppFlavorConfig config) async {
 }
 
 Future<void> _registerRepositories() async {
-  locator.registerFactory<AuthRepository>(
-      () => AuthRepositoryImpl(AuthRemoteDataSource()));
+  locator
+    ..registerFactory<AuthRepository>(
+        () => AuthRepositoryImpl(AuthRemoteDataSource()))
+    ..registerFactory<StoreRepository>(
+        () => StoreRepositoryImpl(StoreLocalDataSource()));
 }

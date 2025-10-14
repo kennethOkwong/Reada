@@ -9,6 +9,7 @@ class StateScreen extends StatelessWidget {
   final bool isLoading;
   final bool hasError;
   final bool isEmpty;
+  final String? errorMessage;
 
   const StateScreen({
     super.key,
@@ -18,6 +19,7 @@ class StateScreen extends StatelessWidget {
     this.isLoading = false,
     this.hasError = false,
     this.isEmpty = false,
+    this.errorMessage,
   });
 
   @override
@@ -28,10 +30,10 @@ class StateScreen extends StatelessWidget {
 
     if (hasError) {
       return error ??
-          const EmptyState(
+          EmptyState(
             isError: true,
-            title: "No data available",
-            message: "Unable to fetch data",
+            title: "No data found",
+            message: errorMessage ?? "Unable to fetch data",
           );
     }
 

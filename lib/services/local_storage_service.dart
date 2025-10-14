@@ -1,17 +1,29 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:reada/features/authentication/data/dtos/user_response_dto.dart';
 import 'package:reada/services/api%20service/error_handling/exception_handler.dart';
+import 'package:reada/services/api%20service/error_handling/exceptions.dart';
 
 class LocalStorageKeys {
   static String refreshToken = 'refreshToken';
   static String accessToken = 'accessToken';
   static String user = 'user';
+  static String store = 'store';
+  static String bookcase = 'bookcase';
+  static String shelf = 'shelf';
+  static String book = 'book';
 }
 
 class LocalStorageService {
   final fSStorage = const FlutterSecureStorage();
+
+  Future<String> getUserScopedKey(String baseKey) async {
+    final user = await getUser();
+    if (user?.email == null) throw ReadaLocalStorageNoDataException();
+    return '${user!.email}_$baseKey';
+  }
 
   Future<String?> getStorageValue(String key) async {
     // Read value
@@ -47,7 +59,8 @@ class LocalStorageService {
           key: LocalStorageKeys.user, value: jsonEncode(userDto.toJson()));
       fSStorage.write(
           key: LocalStorageKeys.accessToken, value: userDto.accessToken);
-      fSStorage.write(key: LocalStorageKeys.user, value: userDto.refreshToken);
+      fSStorage.write(
+          key: LocalStorageKeys.refreshToken, value: userDto.refreshToken);
     } catch (e, s) {
       throw ExceptionHandler.mapToReadaException(e, s);
     }
@@ -57,6 +70,7 @@ class LocalStorageService {
     try {
       final value = await fSStorage.read(key: LocalStorageKeys.user);
       if (value != null) {
+        log('user: $value');
         return UserDto.fromJson(jsonDecode(value));
       }
       return null;

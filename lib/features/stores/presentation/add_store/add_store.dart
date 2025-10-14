@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:reada/app/base/base_ui.dart';
+import 'package:reada/features/stores/presentation/add_store/add_store_vm.dart';
 import 'package:reada/features/stores/presentation/add_store/widgets/add_bookcase_bottom_sheet.dart';
 import 'package:reada/features/stores/presentation/stores_list/stores_event.dart';
-import 'package:reada/features/stores/presentation/stores_list/stores_vm.dart';
-import 'package:reada/services/navigation%20service/app_routes.dart';
 import 'package:reada/shared/bottom_sheets/app_buttom_sheets.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
@@ -18,7 +16,7 @@ import 'package:reada/shared/state_screen.dart';
 import 'package:reada/shared/tables/reada_table.dart';
 import 'package:reada/shared/text%20fields/custom_text_field.dart';
 
-final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class AddStoreView extends StatefulWidget {
   const AddStoreView({super.key});
@@ -32,6 +30,8 @@ class _AddStoreViewState extends State<AddStoreView> {
   final storeAddressController = TextEditingController();
   final latitudeController = TextEditingController();
   final longitudeController = TextEditingController();
+  final storeDetailsController = ExpansibleController();
+  final bookcaseController = ExpansibleController();
 
   @override
   void dispose() {
@@ -44,149 +44,169 @@ class _AddStoreViewState extends State<AddStoreView> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<StoresViewmodel, StoreEvent, List<String>>(
-      onEvent: (context, vm, event) async {
+    return BaseView<AddStoreViewmodel, StoreEvent, void>(
+      viewModel: AddStoreViewmodel(),
+      onEvent: (context, model, event) {
         switch (event.type) {
+          case StoreEventType.storeAdded:
+            HelperFunctions.showSuccessToast('Store created');
+            storeDetailsController.collapse();
+            bookcaseController.expand();
+            break;
           case StoreEventType.failure:
             HelperFunctions.showErrorToast(event.message!);
-            break;
-          case StoreEventType.success:
-            if (!event.user!.isVerified) {
-              final verified = await context.push<bool>(
-                AppRoutes.enterCode,
-                extra: vm.data.toSendCodeDto(),
-              );
-              if (verified != true) break;
-            }
-            if (event.user!.businessProfiles.isEmpty) {
-              context.mounted
-                  ? context.push<bool>(AppRoutes.businessProfile)
-                  : null;
-              break;
-            }
-            context.mounted ? context.go(AppRoutes.dashboard) : null;
-            break;
           default:
-            break;
         }
       },
       builder: (context, vm, child) {
         return Scaffold(
-          appBar: const CustomAppBar(
-            title: 'Add store',
-          ),
+          appBar: const CustomAppBar(title: 'Add Store'),
           body: Padding(
             padding: Constants.pagePadding(context),
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Form(
-                    key: _globalKey,
-                    child: ReadaExpansionTile(
-                      initiallyExpanded: true,
-                      title: "Store details",
-                      children: [
-                        PrimaryTextField(
-                          title: 'Store name',
-                          hintText: 'Enter store name',
-                          controller: storeNameController,
-                          validator: FormValidator.validateRequired,
-                          // onChanged: vm.onStoreNameChanged,
-                          keyboardType: TextInputType.text,
-                        ),
-                        context.vSpacing16,
-                        PrimaryTextField(
-                          title: 'Store address',
-                          hintText: 'Enter store address',
-                          controller: storeAddressController,
-                          // onChanged: vm.onStoreAddressChanged,
-                          keyboardType: TextInputType.text,
-                        ),
-                        context.vSpacing16,
-                        Row(
+                  /// --- STEP 1: STORE DETAILS ---
+                  IgnorePointer(
+                      ignoring: vm.storecreated,
+                      child: Opacity(
+                        opacity: !vm.storecreated ? 1 : 0.5,
+                        child: ReadaExpansionTile(
+                          initiallyExpanded: true,
+                          controller: storeDetailsController,
+                          title: '1. Store Details',
                           children: [
-                            Expanded(
-                              child: PrimaryTextField(
-                                title: 'Latitude',
-                                hintText: 'Enter store latitude',
-                                controller: latitudeController,
-                                // onChanged: vm.onLatitudeChanged,
-                                keyboardType: TextInputType.number,
-                              ),
-                            ),
-                            context.hSpacing16,
-                            Expanded(
-                              child: PrimaryTextField(
-                                title: 'Longitude',
-                                hintText: 'Enter store longitude',
-                                controller: longitudeController,
-                                // onChanged: vm.onLongitudeChanged,
-                                keyboardType: TextInputType.number,
-                              ),
-                            ),
-                          ],
-                        ),
-                        context.vSpacing20,
-                        ReadaButton.filled(
-                          width: double.infinity,
-                          title: 'Add store',
-                          onPressed: () {
-                            if (!_globalKey.currentState!.validate()) {
-                              return;
-                            }
-                            // vm.addStore();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  context.vSpacing32,
-                  ReadaExpansionTile(
-                    title: "Bookcases",
-                    actions: [
-                      ReadaButton.icon(
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          AppBottomSheet.modalBottomSheet(
-                            context: context,
-                            title: 'Add bookcase',
-                            child: const AddBookcaseBottomSheet(),
-                          );
-                        },
-                      ),
-                    ],
-                    children: [
-                      StateScreen(
-                        isEmpty: false,
-                        empty: const EmptyState(
-                          title: 'No book case',
-                          message:
-                              'You have no bookcase yet.\nClick on + icon to add one',
-                        ),
-                        data: ReadaTable(
-                          headers: const ['Case Id', "Bookcase", "Shelves"],
-                          rows: [
-                            [
-                              const Text("BC1-SH2"),
-                              const Text("Gospels"),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                            Form(
+                              key: _formKey,
+                              child: Column(
                                 children: [
-                                  const Text("14"),
-                                  ReadaButton.icon(
-                                    icon: const Icon(Icons.more_vert,
-                                        color: Colors.grey),
-                                    onPressed: () {},
+                                  PrimaryTextField(
+                                    title: 'Store name',
+                                    hintText: 'Enter store name',
+                                    controller: storeNameController,
+                                    validator: FormValidator.validateRequired,
+                                    onChanged: vm.onStoreNameChanged,
+                                  ),
+                                  context.vSpacing16,
+                                  PrimaryTextField(
+                                    title: 'Store address',
+                                    hintText: 'Enter store address',
+                                    validator: FormValidator.validateRequired,
+                                    controller: storeAddressController,
+                                    onChanged: vm.onStoreAddressChanged,
+                                  ),
+                                  context.vSpacing16,
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: PrimaryTextField(
+                                          title: 'Latitude',
+                                          hintText: 'Enter latitude',
+                                          controller: latitudeController,
+                                          onChanged: vm.onLatitudeChanged,
+                                          validator:
+                                              FormValidator.validateRequired,
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                      ),
+                                      context.hSpacing16,
+                                      Expanded(
+                                        child: PrimaryTextField(
+                                          title: 'Longitude',
+                                          hintText: 'Enter longitude',
+                                          controller: longitudeController,
+                                          onChanged: vm.onLongitudeChanged,
+                                          validator:
+                                              FormValidator.validateRequired,
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  context.vSpacing24,
+                                  ReadaButton.filled(
+                                    width: double.infinity,
+                                    title: vm.storecreated
+                                        ? 'Store Added'
+                                        : 'Save Store',
+                                    onPressed: vm.storecreated
+                                        ? () {}
+                                        : () {
+                                            if (!_formKey.currentState!
+                                                .validate()) {
+                                              return;
+                                            }
+                                            vm.addStore();
+                                          },
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ],
                         ),
+                      )),
+                  context.vSpacing24,
+
+                  /// --- STEP 2: BOOKCASE SETUP ---
+                  IgnorePointer(
+                    ignoring: !vm.storecreated,
+                    child: Opacity(
+                      opacity: vm.storecreated ? 1 : 0.5,
+                      child: ReadaExpansionTile(
+                        controller: bookcaseController,
+                        title: '2. Add Bookcases',
+                        actions: [
+                          ReadaButton.icon(
+                            icon: const Icon(Icons.add),
+                            onPressed: vm.storecreated
+                                ? () {
+                                    AppBottomSheet.modalBottomSheet(
+                                      context: context,
+                                      title: 'Add Bookcase',
+                                      child: AddBookcaseBottomSheet(
+                                        vm: vm,
+                                      ),
+                                    );
+                                  }
+                                : () {},
+                          ),
+                        ],
+                        children: [
+                          StateScreen(
+                            isEmpty: false,
+                            empty: const EmptyState(
+                              title: 'No bookcase yet',
+                              message:
+                                  'You have no bookcases yet.\nTap + to add one.',
+                            ),
+                            data: ReadaTable(
+                              headers: const ['Case ID', 'Bookcase', 'Shelves'],
+                              rows: [
+                                [
+                                  const Text('BC1-SH2'),
+                                  const Text('Gospels'),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Text('14'),
+                                      ReadaButton.icon(
+                                        icon: const Icon(Icons.more_vert,
+                                            color: Colors.grey),
+                                        onPressed: () {},
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),

@@ -13,6 +13,9 @@ import 'package:reada/features/inventory/presentation/add_inventory/add_invemtor
 import 'package:reada/features/inventory/presentation/update_inventory/update_inventory_view.dart';
 import 'package:reada/features/onboarding/landing_view/landing_view.dart';
 import 'package:reada/features/onboarding/splash_view.dart';
+import 'package:reada/features/order/presentation/create_local_order/create_order_view.dart';
+import 'package:reada/features/order/presentation/order_details/order_details_view.dart';
+import 'package:reada/features/stores/domain/entities/store_entity.dart';
 import 'package:reada/features/stores/presentation/add_store/add_store.dart';
 import 'package:reada/features/stores/presentation/store_details/book_details_view.dart';
 import 'package:reada/features/stores/presentation/store_details/shelves_view.dart';
@@ -73,7 +76,7 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.storeDetails,
         builder: (context, state) {
-          final store = state.extra as String;
+          final store = state.extra as Store;
           return StoreDetailsView(store: store);
         },
       ),
@@ -102,6 +105,19 @@ class AppRouter {
             final item = state.extra as String;
             return UpdateInventoryView(inventory: item);
           }),
+      GoRoute(
+        path: AppRoutes.orderDetails,
+        builder: (context, state) {
+          final order = state.extra as String;
+          return OrderDetailsView(order: order);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.createOrder,
+        builder: (context, state) {
+          return const CreateLocalOrderView();
+        },
+      ),
     ],
     errorBuilder: (context, state) => const Scaffold(
       body: Center(

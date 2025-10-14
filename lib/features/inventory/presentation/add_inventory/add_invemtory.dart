@@ -8,6 +8,7 @@ import 'package:reada/features/inventory/presentation/widgets/inventory_shelving
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/custom_app_bar.dart';
+import 'package:reada/shared/dropdown/reada_dropdown_field.dart';
 import 'package:reada/shared/empty_state.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
 import 'package:reada/shared/form_validator.dart';
@@ -285,6 +286,15 @@ class _PricingStockShelvingStepState extends State<_PricingStockShelvingStep> {
 
     return Column(
       children: [
+        context.vSpacing16,
+        ReadaDropdown<String>(
+          title: 'Adding inventory to',
+          value: 'All Stores', // from state
+          items: ['Downtown Branch', 'Uptown Branch']
+              .map((p) => DropdownMenuItem(value: p, child: Text(p)))
+              .toList(),
+          onChanged: (value) {},
+        ),
         context.vSpacing16,
         InventoryPricingForm(
           priceController: priceController,

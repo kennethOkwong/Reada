@@ -79,4 +79,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Success<void>> clearLocalStorageAuth() {
     return authDataSource.clearLocalStorage();
   }
+
+  @override
+  Future<Success<void>> logout() {
+    return authDataSource.logout();
+  }
 }

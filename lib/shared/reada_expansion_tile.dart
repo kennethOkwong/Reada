@@ -9,10 +9,11 @@ class ReadaExpansionTile extends StatelessWidget {
   final IconData collapsedIcon;
   final Color? backgroundColor;
   final Color? collapsedBackgroundColor;
-  final List<Widget> actions; // ✅ new
+  final List<Widget> actions;
+  final ExpansibleController? controller;
 
   const ReadaExpansionTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.children,
     this.initiallyExpanded = false,
@@ -20,8 +21,9 @@ class ReadaExpansionTile extends StatelessWidget {
     this.collapsedIcon = Icons.keyboard_arrow_down,
     this.backgroundColor,
     this.collapsedBackgroundColor,
-    this.actions = const [], // ✅ default empty
-  }) : super(key: key);
+    this.actions = const [],
+    this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class ReadaExpansionTile extends StatelessWidget {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
+          controller: controller,
           title: Text(
             title,
             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -110,8 +113,8 @@ class _ExpansionIconState extends State<_ExpansionIcon>
   @override
   Widget build(BuildContext context) {
     // ExpansionTile provides an ExpansionTileController via InheritedWidget
-    final expansionTile = ExpansionTileController.of(context);
-    final isExpanded = expansionTile?.isExpanded ?? false;
+    final expansionTile = ExpansibleController.of(context);
+    final isExpanded = expansionTile.isExpanded;
 
     if (isExpanded) {
       _controller.forward();

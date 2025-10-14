@@ -51,7 +51,7 @@ class EmptyState extends StatelessWidget {
               const SizedBox(height: 24),
               ReadaButton.elevated(
                 title: buttonText!,
-                onPressed: () {},
+                onPressed: onButtonPressed ?? () {},
               )
             ]
           ],

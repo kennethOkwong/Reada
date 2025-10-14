@@ -35,7 +35,6 @@ class _InventoryPricingFormState extends State<InventoryPricingForm> {
   @override
   Widget build(BuildContext context) {
     return ReadaExpansionTile(
-      initiallyExpanded: true,
       title: "Pricing & Stock",
       children: [
         PrimaryTextField(

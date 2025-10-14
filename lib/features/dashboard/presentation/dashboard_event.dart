@@ -1,1 +1,1 @@
-enum DashboardEvent { idle }
+enum DashboardEvent { idle, logedOut }

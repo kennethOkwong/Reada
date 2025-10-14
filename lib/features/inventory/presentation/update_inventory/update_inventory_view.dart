@@ -4,6 +4,7 @@ import 'package:reada/features/inventory/presentation/inventory_list/inventory_e
 import 'package:reada/features/inventory/presentation/inventory_list/inventory_list_vm.dart';
 import 'package:reada/features/inventory/presentation/widgets/inventory_pricing_form.dart';
 import 'package:reada/features/inventory/presentation/widgets/inventory_shelving_form.dart';
+import 'package:reada/features/widgets/book_info_card.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/custom_app_bar.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
@@ -62,7 +63,13 @@ class _UpdateInventoryViewState extends State<UpdateInventoryView> {
               key: _globalKey,
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const BookInfoCard(
+                      book: 'dummyBook',
+                    ),
+                    context.vSpacing16,
+
                     /// Pricing & Stock Section
                     InventoryPricingForm(
                       priceController: priceController,

@@ -19,6 +19,7 @@ class LoginUseCase {
         return const Failure(ReadaInacticeUserException());
       }
 
+      //Get user verified if not verified
       if (!user.data!.isVerified) {
         sendCodeUseCase.call(data.toSendCodeDto());
       }

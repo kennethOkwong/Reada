@@ -5,6 +5,7 @@ import 'package:reada/features/inventory/presentation/inventory_list/inventory_e
 import 'package:reada/features/inventory/presentation/inventory_list/inventory_list_vm.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
 import 'package:reada/shared/constants.dart';
+import 'package:reada/shared/dropdown/reada_dropdown_field.dart';
 import 'package:reada/shared/dropdown/reada_popup_menu.dart';
 import 'package:reada/shared/empty_state.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
@@ -46,24 +47,39 @@ class InventoryListView extends StatelessWidget {
               // handle action
             },
           ),
-          data: ListView.separated(
-            separatorBuilder: (context, index) => context.vSpacing16,
-            itemCount: 12,
-            itemBuilder: (context, index) {
-              // final item = vm.items[index];
-              return InventoryCard(
-                item: dummyInventory,
-                onTap: () => context.push(
-                  AppRoutes.updateInventory,
-                  extra: 'dummyInventory',
+          data: Column(
+            children: [
+              ReadaDropdown<String>(
+                title: 'Viewing inventory for',
+                value: 'All Stores', // from state
+                items: ['All Stores', 'Downtown Branch', 'Uptown Branch']
+                    .map((p) => DropdownMenuItem(value: p, child: Text(p)))
+                    .toList(),
+                onChanged: (value) {},
+              ),
+              context.vSpacing16,
+              Expanded(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => context.vSpacing16,
+                  itemCount: 12,
+                  itemBuilder: (context, index) {
+                    // final item = vm.items[index];
+                    return InventoryCard(
+                      item: 'dummyInventory',
+                      onTap: () => context.push(
+                        AppRoutes.updateInventory,
+                        extra: 'dummyInventory',
+                      ),
+                      onUpdate: () => context.push(
+                        AppRoutes.updateInventory,
+                        extra: 'dummyInventory',
+                      ),
+                      onDelete: () {},
+                    );
+                  },
                 ),
-                onUpdate: () => context.push(
-                  AppRoutes.updateInventory,
-                  extra: 'dummyInventory',
-                ),
-                onDelete: () {},
-              );
-            },
+              ),
+            ],
           ),
         );
       },
@@ -80,7 +96,7 @@ class InventoryCard extends StatelessWidget {
     required this.onTap,
   });
 
-  final InventoryItem item;
+  final String item;
   final VoidCallback onUpdate;
   final VoidCallback onDelete;
   final VoidCallback onTap;
@@ -94,10 +110,13 @@ class InventoryCard extends StatelessWidget {
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 16, right: 4),
-        leading: Image.network(Constants.defaultBookCover,
-            width: 48, height: 48, fit: BoxFit.cover),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(Constants.defaultBookCover,
+              width: 48, height: 48, fit: BoxFit.cover),
+        ),
         title: Text(
-          item.title,
+          'The writer in you',
           style: context.textTheme.titleSmall,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -106,13 +125,13 @@ class InventoryCard extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           TextSpan(
-            text: '${item.author} •',
+            text: 'Cadenny Stores •',
             style: context.textTheme.labelSmall,
             children: [
               TextSpan(
-                text: ' ${item.quantity} in stock',
+                text: ' 5 in stock',
                 style: context.textTheme.titleSmall?.copyWith(
-                  color: item.quantity > 1 ? null : context.colorScheme.error,
+                  color: 2 > 1 ? null : context.colorScheme.error,
                 ),
               )
             ],
@@ -132,25 +151,4 @@ class InventoryCard extends StatelessWidget {
       ),
     );
   }
-}
-
-final dummyInventory = InventoryItem(
-  title: "The Great Gatsby",
-  author: "F. Scott Fitzgerald",
-  coverUrl: "https://example.com/gatsby.jpg",
-  quantity: 5,
-);
-
-class InventoryItem {
-  final String title;
-  final String author;
-  final String coverUrl;
-  final int quantity;
-
-  InventoryItem({
-    required this.title,
-    required this.author,
-    required this.coverUrl,
-    required this.quantity,
-  });
 }

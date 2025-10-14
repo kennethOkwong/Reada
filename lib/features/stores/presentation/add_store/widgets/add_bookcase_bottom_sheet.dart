@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:reada/features/stores/presentation/add_store/add_store_vm.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
 import 'package:reada/shared/form_validator.dart';
@@ -11,7 +12,10 @@ final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 class AddBookcaseBottomSheet extends StatelessWidget {
   const AddBookcaseBottomSheet({
     super.key,
+    required this.vm,
   });
+
+  final AddStoreViewmodel vm;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +25,11 @@ class AddBookcaseBottomSheet extends StatelessWidget {
         key: _globalKey,
         child: Column(
           children: [
-            const PrimaryTextField(
+            PrimaryTextField(
               title: 'Bookcase title',
               hintText: 'Enter bookcase title',
               validator: FormValidator.validateRequired,
-              // onChanged: vm.onStoreNameChanged,
+              onChanged: vm.onBookcaseTitleChanged,
               keyboardType: TextInputType.text,
             ),
             context.vSpacing16,
@@ -36,7 +40,7 @@ class AddBookcaseBottomSheet extends StatelessWidget {
               min: 10,
               max: 100,
               validator: FormValidator.validateIntegerIncrementField,
-              onChanged: (value) {},
+              onChanged: vm.onNoOfShelvesChanged,
             ),
             context.vSpacing20,
             ReadaButton.filled(
@@ -46,7 +50,7 @@ class AddBookcaseBottomSheet extends StatelessWidget {
                 if (!_globalKey.currentState!.validate()) {
                   return;
                 }
-                context.pop();
+                vm.addBookcase();
               },
             ),
             context.vSpacing20,

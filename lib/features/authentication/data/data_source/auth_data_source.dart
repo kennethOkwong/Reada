@@ -9,6 +9,8 @@ import 'package:reada/features/authentication/data/dtos/verify_code_request_dto.
 
 abstract class AuthDataSource {
   Future<Success<UserDto>> login({required LoginRequestDto requestData});
+  Future<Success<void>> logout();
+
   Future<Success<void>> register({required RegisterRequestDto data});
 
   Future<Success<void>> sendOTP(SendCodeRequestDto data);

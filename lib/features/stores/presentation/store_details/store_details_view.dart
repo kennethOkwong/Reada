@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reada/app/base/base_ui.dart';
+import 'package:reada/features/stores/domain/entities/store_entity.dart';
 import 'package:reada/features/stores/presentation/stores_list/stores_event.dart';
 import 'package:reada/features/stores/presentation/stores_list/stores_vm.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
@@ -12,11 +13,11 @@ import 'package:reada/shared/extensions/build_context_extension.dart';
 class StoreDetailsView extends StatelessWidget {
   const StoreDetailsView({super.key, required this.store});
 
-  final String store;
+  final Store store;
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<StoresViewmodel, StoreEvent, List<String>>(
+    return BaseView<StoresViewmodel, StoreEvent, List<Store>>(
       viewModel: StoresViewmodel(),
       onEvent: (context, vm, event) async {
         // switch (event.type) {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:get_it/get_it.dart';
 import 'package:reada/app/locator.dart';
 import 'package:reada/app/result.dart';
@@ -29,7 +27,6 @@ class AuthRemoteDataSource implements AuthDataSource {
     final response = await _helper.postData(url, requestData.toJson());
 
     if (response.isSuccessful) {
-      log(response.data.toString());
       final responseData = UserDto.fromJson(response.data);
       return Success(message: response.message, data: responseData);
     }
@@ -132,6 +129,11 @@ class AuthRemoteDataSource implements AuthDataSource {
   @override
   Future<Success<void>> clearLocalStorageAuth() async {
     await _localStorageService.clearAllAuth();
+    return const Success();
+  }
+
+  @override
+  Future<Success<void>> logout() async {
     return const Success();
   }
 }

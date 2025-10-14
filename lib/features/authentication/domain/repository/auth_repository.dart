@@ -9,6 +9,8 @@ import 'package:reada/features/authentication/domain/entities/user.dart';
 
 abstract class AuthRepository {
   Future<Success<User>> login({required LoginRequestDto data});
+  Future<Success<void>> logout();
+
   Future<Success<void>> register({required RegisterRequestDto data});
 
   Future<Success<void>> sendOTP(SendCodeRequestDto data);

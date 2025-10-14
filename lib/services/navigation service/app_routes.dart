@@ -15,4 +15,6 @@ class AppRoutes {
   static const String bookDetails = '/book-details';
   static const String addInventory = '/add-inventory';
   static const String updateInventory = '/update-inventory';
+  static const String orderDetails = '/order-details';
+  static const String createOrder = '/create-order';
 }

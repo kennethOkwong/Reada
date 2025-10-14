@@ -4,6 +4,7 @@ import 'package:reada/features/authentication/domain/use_cases/create_business_p
 import 'package:reada/features/authentication/domain/use_cases/get_user_from_api_usecase.dart';
 import 'package:reada/features/authentication/domain/use_cases/get_user_from_local_storage_usecase.dart';
 import 'package:reada/features/authentication/domain/use_cases/login_use_case.dart';
+import 'package:reada/features/authentication/domain/use_cases/logout_use_case.dart';
 import 'package:reada/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:reada/features/authentication/domain/use_cases/reset_password_use_case.dart';
 import 'package:reada/features/authentication/domain/use_cases/save_user_to_local_storage_usecase.dart';
@@ -17,6 +18,7 @@ final registerUseCase = RegisterUseCase(_authRepository);
 final sendCodeUseCase = SendCodeUseCase(_authRepository);
 final verifyCodeUseCase = VerifyCodeUseCase(_authRepository);
 final loginUseCase = LoginUseCase(_authRepository);
+final logoutUseCase = LogoutUseCase(_authRepository);
 final resetPasswordUseCase = ResetPasswordUseCase(_authRepository);
 final createBusinessProfileUsecase =
     CreateBusinessProfileUsecase(_authRepository);

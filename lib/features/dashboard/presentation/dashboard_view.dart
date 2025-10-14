@@ -8,14 +8,13 @@ import 'package:reada/features/dashboard/presentation/dashboard_event.dart';
 import 'package:reada/features/dashboard/presentation/dashboard_viewmodel.dart';
 import 'package:reada/features/dashboard/presentation/widgets/side_drawer.dart';
 import 'package:reada/features/inventory/presentation/inventory_list/invenory_list_view.dart';
+import 'package:reada/features/order/presentation/order_list/order_list_view.dart';
 import 'package:reada/features/stores/presentation/stores_list/stores_view.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
 import 'package:reada/shared/app%20images/svg_icons.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/custom_app_bar.dart';
-import 'package:reada/shared/empty_state.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
-import 'package:reada/shared/state_screen.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -23,12 +22,12 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<DashboardViewmodel, DashboardEvent, void>(
-      builder: (context, model, child) {
+      builder: (context, vm, child) {
         return PopScope(
-          canPop: model.currentIndex == 0,
+          canPop: vm.currentIndex == 0,
           onPopInvokedWithResult: (didPop, result) {
-            if (model.currentIndex != 0) {
-              model.updateCurrenctIndex(0);
+            if (vm.currentIndex != 0) {
+              vm.updateCurrenctIndex(0);
             }
           },
           child: Column(
@@ -36,26 +35,28 @@ class DashboardView extends StatelessWidget {
               Expanded(
                 child: Scaffold(
                   appBar: CustomAppBar(
-                    title: model.appBarTitle,
+                    title: vm.appBarTitle,
                     centerTitle: false,
                     titleStyle: context.textTheme.titleLarge,
                   ),
                   drawer: SideDrawer(
                     user: User(
-                        id: 1,
-                        email: 'okwongkenneth36@gmail.com',
-                        firstName: 'Kenneth',
-                        lastName: 'Okwong',
-                        phoneNumber: '',
-                        userType: '',
-                        isVerified: true,
-                        isActive: true,
-                        dateJoined: '',
-                        accessToken: '',
-                        refreshToken: '',
-                        businessProfiles: []),
+                      id: 1,
+                      email: 'okwongkenneth36@gmail.com',
+                      firstName: 'Kenneth',
+                      lastName: 'Okwong',
+                      phoneNumber: '',
+                      userType: '',
+                      isVerified: true,
+                      isActive: true,
+                      dateJoined: '',
+                      accessToken: '',
+                      refreshToken: '',
+                      businessProfiles: [],
+                    ),
                     onLogout: () {
-                      // Handle logout
+                      vm.logout();
+                      context.go(AppRoutes.login);
                     },
                   ),
                   floatingActionButton: FloatingActionButton(
@@ -71,25 +72,11 @@ class DashboardView extends StatelessWidget {
                       children: [
                         Positioned.fill(
                           child: IndexedStack(
-                            index: model.currentIndex,
-                            children: [
-                              StateScreen(
-                                isLoading: model.isLoading,
-                                hasError: model.hasError,
-                                isEmpty: true,
-                                empty: EmptyState(
-                                  title: "No Data",
-                                  message:
-                                      "You don’t have any orders yet.\nStart by creating a local order!",
-                                  buttonText: "Create local order",
-                                  onButtonPressed: () {
-                                    // handle action
-                                  },
-                                ),
-                                data: const Text('Order list'),
-                              ),
-                              const InventoryListView(),
-                              const StoresView(),
+                            index: vm.currentIndex,
+                            children: const [
+                              OrdersView(),
+                              InventoryListView(),
+                              StoresView(),
                             ],
                           ),
                         ),
@@ -101,7 +88,7 @@ class DashboardView extends StatelessWidget {
                 ),
               ),
               Container(
-                height: 100,
+                height: 80,
                 color: context.colorScheme.secondaryContainer,
                 child: Material(
                   type: MaterialType.transparency,
@@ -110,10 +97,10 @@ class DashboardView extends StatelessWidget {
                       return Expanded(
                         child: _buildNavBarItem(
                           context: context,
-                          isSelected: model.currentIndex == i,
+                          isSelected: vm.currentIndex == i,
                           text: val.name,
                           icon: val.icon,
-                          onPressed: () => model.updateCurrenctIndex(i),
+                          onPressed: () => vm.updateCurrenctIndex(i),
                         ),
                       );
                     }).toList(),
