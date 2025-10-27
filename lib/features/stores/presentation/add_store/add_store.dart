@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reada/app/base/base_ui.dart';
 import 'package:reada/features/stores/presentation/add_store/add_store_vm.dart';
-import 'package:reada/features/stores/presentation/add_store/widgets/add_bookcase_bottom_sheet.dart';
 import 'package:reada/features/stores/presentation/stores_list/stores_event.dart';
-import 'package:reada/shared/bottom_sheets/app_buttom_sheets.dart';
 import 'package:reada/shared/buttons/cutsom_button.dart';
 import 'package:reada/shared/constants.dart';
 import 'package:reada/shared/custom_app_bar.dart';
-import 'package:reada/shared/empty_state.dart';
 import 'package:reada/shared/extensions/build_context_extension.dart';
 import 'package:reada/shared/form_validator.dart';
 import 'package:reada/shared/helper_functions.dart';
 import 'package:reada/shared/reada_expansion_tile.dart';
-import 'package:reada/shared/state_screen.dart';
-import 'package:reada/shared/tables/reada_table.dart';
 import 'package:reada/shared/text%20fields/custom_text_field.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -50,8 +46,9 @@ class _AddStoreViewState extends State<AddStoreView> {
         switch (event.type) {
           case StoreEventType.storeAdded:
             HelperFunctions.showSuccessToast('Store created');
-            storeDetailsController.collapse();
-            bookcaseController.expand();
+            // storeDetailsController.collapse();
+            // bookcaseController.expand();
+            context.pop();
             break;
           case StoreEventType.failure:
             HelperFunctions.showErrorToast(event.message!);
@@ -60,7 +57,7 @@ class _AddStoreViewState extends State<AddStoreView> {
       },
       builder: (context, vm, child) {
         return Scaffold(
-          appBar: const CustomAppBar(title: 'Add Store'),
+          appBar: const CustomAppBar(title: 'Create store'),
           body: Padding(
             padding: Constants.pagePadding(context),
             child: SingleChildScrollView(
@@ -75,7 +72,7 @@ class _AddStoreViewState extends State<AddStoreView> {
                         child: ReadaExpansionTile(
                           initiallyExpanded: true,
                           controller: storeDetailsController,
-                          title: '1. Store Details',
+                          title: 'Store Details',
                           children: [
                             Form(
                               key: _formKey,
@@ -148,66 +145,64 @@ class _AddStoreViewState extends State<AddStoreView> {
                       )),
                   context.vSpacing24,
 
-                  /// --- STEP 2: BOOKCASE SETUP ---
-                  IgnorePointer(
-                    ignoring: !vm.storecreated,
-                    child: Opacity(
-                      opacity: vm.storecreated ? 1 : 0.5,
-                      child: ReadaExpansionTile(
-                        controller: bookcaseController,
-                        title: '2. Add Bookcases',
-                        actions: [
-                          ReadaButton.icon(
-                            icon: const Icon(Icons.add),
-                            onPressed: vm.storecreated
-                                ? () {
-                                    AppBottomSheet.modalBottomSheet(
-                                      context: context,
-                                      title: 'Add Bookcase',
-                                      child: AddBookcaseBottomSheet(
-                                        vm: vm,
-                                      ),
-                                    );
-                                  }
-                                : () {},
-                          ),
-                        ],
-                        children: [
-                          StateScreen(
-                            isEmpty: false,
-                            empty: const EmptyState(
-                              title: 'No bookcase yet',
-                              message:
-                                  'You have no bookcases yet.\nTap + to add one.',
-                            ),
-                            data: ReadaTable(
-                              headers: const ['Case ID', 'Bookcase', 'Shelves'],
-                              rows: [
-                                [
-                                  const Text('BC1-SH2'),
-                                  const Text('Gospels'),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      const Text('14'),
-                                      ReadaButton.icon(
-                                        icon: const Icon(Icons.more_vert,
-                                            color: Colors.grey),
-                                        onPressed: () {},
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // /// --- STEP 2: BOOKCASE SETUP ---
+                  // IgnorePointer(
+                  //   ignoring: !vm.storecreated,
+                  //   child: Opacity(
+                  //     opacity: vm.storecreated ? 1 : 0.5,
+                  //     child: ReadaExpansionTile(
+                  //       controller: bookcaseController,
+                  //       title: '2. Add Bookcases',
+                  //       actions: [
+                  //         ReadaButton.icon(
+                  //           icon: const Icon(Icons.add),
+                  //           onPressed: vm.storecreated
+                  //               ? () {
+                  //                   AppBottomSheet.modalBottomSheet(
+                  //                     context: context,
+                  //                     title: 'Add Bookcase',
+                  //                     child: const AddBookcaseBottomSheet(),
+                  //                   );
+                  //                 }
+                  //               : () {},
+                  //         ),
+                  //       ],
+                  //       children: [
+                  //         StateScreen(
+                  //           isEmpty: false,
+                  //           empty: const EmptyState(
+                  //             title: 'No bookcase yet',
+                  //             message:
+                  //                 'You have no bookcases yet.\nTap + to add one.',
+                  //           ),
+                  //           data: ReadaTable(
+                  //             headers: const ['Case ID', 'Bookcase', 'Shelves'],
+                  //             rows: [
+                  //               [
+                  //                 const Text('BC1-SH2'),
+                  //                 const Text('Gospels'),
+                  //                 Row(
+                  //                   mainAxisAlignment:
+                  //                       MainAxisAlignment.spaceBetween,
+                  //                   crossAxisAlignment:
+                  //                       CrossAxisAlignment.center,
+                  //                   children: [
+                  //                     const Text('14'),
+                  //                     ReadaButton.icon(
+                  //                       icon: const Icon(Icons.more_vert,
+                  //                           color: Colors.grey),
+                  //                       onPressed: () {},
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ],
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

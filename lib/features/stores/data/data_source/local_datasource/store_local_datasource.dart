@@ -3,7 +3,8 @@ import 'dart:developer';
 
 import 'package:reada/app/result.dart';
 import 'package:reada/features/stores/data/data_source/store_data_source.dart';
-import 'package:reada/features/stores/data/dtos/add_store_request_dto.dart';
+import 'package:reada/features/stores/data/dtos/request_dtos/add_bookcase_request_dto.dart';
+import 'package:reada/features/stores/data/dtos/request_dtos/add_store_request_dto.dart';
 import 'package:reada/features/stores/data/dtos/book_dto.dart';
 import 'package:reada/features/stores/data/dtos/bookcase_dto.dart';
 import 'package:reada/features/stores/data/dtos/shelf_dto.dart';
@@ -60,14 +61,10 @@ class StoreLocalDataSource implements StoreDataSource {
   @override
   Future<Success<List<StoreDto>>> getStores() async {
     try {
-      log('Here');
-
       final storeKey =
           await _localStorageService.getUserScopedKey(LocalStorageKeys.store);
-      log(storeKey);
       final value = await _localStorageService.getStorageValue(storeKey);
       if (value == null) return const Success(data: <StoreDto>[]);
-      log(value);
       final decoded = jsonDecode(value) as List;
       final stores = decoded.map((e) => StoreDto.fromJson(e)).toList();
 
@@ -83,31 +80,45 @@ class StoreLocalDataSource implements StoreDataSource {
   /// ---------------------------
 
   @override
-  Future<Success<BookcaseDto>> addBookcase({required BookcaseDto data}) async {
+  Future<Success<BookcaseDto>> addBookcase({
+    required AddBookcaseRequestDto requestData,
+  }) async {
     try {
-      final key = await _localStorageService
+      // ✅ Get the user-scoped key for bookcases
+      final bookcaseKey = await _localStorageService
           .getUserScopedKey(LocalStorageKeys.bookcase);
 
-      final value = await _localStorageService.getStorageValue(key);
-      final bookcases = value != null
+      // ✅ Fetch existing bookcases
+      final value = await _localStorageService.getStorageValue(bookcaseKey);
+      final existingBookcases = value != null
           ? (jsonDecode(value) as List)
               .map((e) => BookcaseDto.fromJson(e))
               .toList()
           : <BookcaseDto>[];
 
-      final idx = bookcases.indexWhere((b) => b.title == data.title);
+      final bookcasesInSelectedStore = existingBookcases
+          .where((bookCase) => bookCase.storeId == requestData.storeId)
+          .toList();
+
+      final idx = bookcasesInSelectedStore.indexWhere(
+          (s) => s.title?.toLowerCase() == requestData.title?.toLowerCase());
       if (idx >= 0) {
-        bookcases[idx] = data;
-      } else {
-        bookcases.add(data);
+        throw const ReadaUnknownException(
+            message: "Bookcase with the same title already exists");
       }
 
-      await _localStorageService.saveStorageValue(
-        key,
-        jsonEncode(bookcases.map((e) => e.toJson()).toList()),
-      );
+      final id = existingBookcases.length + 1;
+      BookcaseDto dto = BookcaseDto.fromJson(requestData.toJson());
+      BookcaseDto dtoWithId = dto.copyWith(id: id);
+      existingBookcases.add(dtoWithId);
 
-      return Success(data: data);
+      await _localStorageService.saveStorageValue(
+        bookcaseKey,
+        jsonEncode(
+          existingBookcases.map((e) => e.toJson()).toList(),
+        ),
+      );
+      return Success(data: dtoWithId);
     } catch (e, s) {
       throw ExceptionHandler.mapToReadaException(e, s);
     }
@@ -115,7 +126,7 @@ class StoreLocalDataSource implements StoreDataSource {
 
   @override
   Future<Success<List<BookcaseDto>>> getBookcases(
-      {required String storeId}) async {
+      {required int storeId}) async {
     try {
       final key = await _localStorageService
           .getUserScopedKey(LocalStorageKeys.bookcase);
@@ -123,12 +134,16 @@ class StoreLocalDataSource implements StoreDataSource {
       if (value == null) return const Success(data: <BookcaseDto>[]);
 
       final decoded = jsonDecode(value) as List;
-      final bookcases = decoded
-          .map((e) => BookcaseDto.fromJson(e))
-          .where((b) => b.storeId == storeId)
-          .toList();
+      final bookcases = decoded.map((e) => BookcaseDto.fromJson(e)).toList();
+      // log(bookcases.length.toString());
+      // log(storeId.toString());
+      final bookcasesInSelectedStore = bookcases.where((bookcase) {
+        // log(bookcase.storeId?.toString() ?? 'null');
 
-      return Success(data: bookcases);
+        return bookcase.storeId == storeId;
+      }).toList();
+      // log(bookcasesInSelectedStore.length.toString());
+      return Success(data: bookcasesInSelectedStore);
     } catch (e, s) {
       throw ExceptionHandler.mapToReadaException(e, s);
     }

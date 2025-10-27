@@ -12,6 +12,7 @@ import 'package:reada/features/dashboard/presentation/dashboard_viewmodel.dart';
 import 'package:reada/features/stores/data/data_source/local_datasource/store_local_datasource.dart';
 import 'package:reada/features/stores/data/repo_impl/store_repo_impl.dart';
 import 'package:reada/features/stores/domain/repository/store_repo.dart';
+import 'package:reada/features/stores/presentation/store_details/store_details_vm.dart';
 import 'package:reada/features/stores/presentation/stores_list/stores_vm.dart';
 import 'package:reada/services/api%20service/api.dart';
 
@@ -37,7 +38,8 @@ Future<void> _registerViewmodels() async {
     ..registerFactory<ForgotPasswordViewmodel>(ForgotPasswordViewmodel.new)
     ..registerFactory<VerifyCodeViewmodel>(VerifyCodeViewmodel.new)
     ..registerLazySingleton<StoresViewmodel>(StoresViewmodel.new)
-    ..registerFactory<DashboardViewmodel>(DashboardViewmodel.new);
+    ..registerFactory<DashboardViewmodel>(DashboardViewmodel.new)
+    ..registerLazySingleton<StoreDetailsViewmodel>(StoreDetailsViewmodel.new);
 }
 
 Future<void> _registerExternalDependencies(AppFlavorConfig config) async {

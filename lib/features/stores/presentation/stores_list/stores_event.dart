@@ -1,5 +1,3 @@
-import 'package:reada/features/stores/data/dtos/bookcase_dto.dart';
-
 enum StoreEventType {
   idle,
   loading,
@@ -17,14 +15,9 @@ class StoreEvent {
   final StoreEventType type;
   final String? message;
 
-  final BookcaseDto? bookcase;
-  final List<BookcaseDto>? bookcases;
-
   const StoreEvent._(
     this.type, {
     this.message,
-    this.bookcase,
-    this.bookcases,
   });
 
   /// Default states

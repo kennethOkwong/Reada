@@ -15,6 +15,7 @@ import 'package:reada/features/onboarding/landing_view/landing_view.dart';
 import 'package:reada/features/onboarding/splash_view.dart';
 import 'package:reada/features/order/presentation/create_local_order/create_order_view.dart';
 import 'package:reada/features/order/presentation/order_details/order_details_view.dart';
+import 'package:reada/features/stores/domain/entities/bookcase_entity.dart';
 import 'package:reada/features/stores/domain/entities/store_entity.dart';
 import 'package:reada/features/stores/presentation/add_store/add_store.dart';
 import 'package:reada/features/stores/presentation/store_details/book_details_view.dart';
@@ -84,7 +85,7 @@ class AppRouter {
           path: AppRoutes.shelves,
           builder: (context, state) {
             return ShelvesView(
-              bookcase: state.extra as String,
+              bookcase: state.extra as Bookcase,
             );
           }),
       GoRoute(

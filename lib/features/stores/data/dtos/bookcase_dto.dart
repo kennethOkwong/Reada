@@ -3,60 +3,59 @@ import 'package:reada/shared/helper_functions.dart';
 
 class BookcaseDto {
   final int? id;
-  final String? storeId;
+  final int? storeId;
   final String? title;
-  final int? shelves;
+  final int? shelvesCount;
 
   const BookcaseDto({
     this.id,
     this.storeId,
     this.title,
-    this.shelves,
+    this.shelvesCount,
   });
 
   factory BookcaseDto.fromJson(Map<String, dynamic> json) {
     return BookcaseDto(
       id: HelperFunctions.safeCast<int>(json['id']),
-      storeId: HelperFunctions.safeCast<String>(json['storeId']),
+      storeId: HelperFunctions.safeCast<int>(json['store_id']),
       title: HelperFunctions.safeCast<String>(json['title']),
-      shelves: HelperFunctions.safeCast<int>(json['shelves']),
+      shelvesCount: HelperFunctions.safeCast<int>(json['shelves_count']),
     );
   }
 
   factory BookcaseDto.empty() {
-    return BookcaseDto(
-      id: id,
-      title: '',
-      shelves: 0,
-    );
+    return const BookcaseDto();
   }
 
   BookcaseDto copyWith({
-    String? caseId,
+    int? id,
+    int? storeId,
     String? title,
-    int? shelves,
+    int? shelvesCount,
   }) {
     return BookcaseDto(
-      caseId: caseId ?? this.caseId,
+      id: id ?? this.id,
+      storeId: storeId ?? this.storeId,
       title: title ?? this.title,
-      shelves: shelves ?? this.shelves,
+      shelvesCount: shelvesCount ?? this.shelvesCount,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'caseId': caseId,
+      'id': id,
+      'store_id': storeId,
       'title': title,
-      'shelves': shelves,
+      'shelves_count': shelvesCount,
     };
   }
 
   Bookcase toDomain() {
     return Bookcase(
-      id: id,
-      storeId: storeId,
-      title: title,
-      shelvesCount: shelvesCount,
+      id: HelperFunctions.requireField(id, 'id'),
+      storeId: HelperFunctions.requireField(storeId, 'store_id'),
+      title: HelperFunctions.requireField(title, 'title'),
+      shelvesCount: HelperFunctions.requireField(shelvesCount, 'shelves_count'),
     );
   }
 }

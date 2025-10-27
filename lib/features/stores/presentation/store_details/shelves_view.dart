@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reada/app/base/base_ui.dart';
+import 'package:reada/features/stores/domain/entities/bookcase_entity.dart';
 import 'package:reada/features/stores/presentation/stores_list/stores_event.dart';
 import 'package:reada/features/stores/presentation/stores_list/stores_vm.dart';
 import 'package:reada/services/navigation%20service/app_routes.dart';
@@ -10,7 +11,7 @@ import 'package:reada/shared/extensions/build_context_extension.dart';
 
 class ShelvesView extends StatelessWidget {
   const ShelvesView({super.key, required this.bookcase});
-  final String bookcase;
+  final Bookcase bookcase;
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +31,14 @@ class ShelvesView extends StatelessWidget {
       },
       builder: (context, vm, child) {
         return Scaffold(
-          appBar: const CustomAppBar(
-            title: 'Bookcase 1',
-            heroTag: 'bookcase-0',
+          appBar: CustomAppBar(
+            title: bookcase.title,
+            heroTag: 'bookcase_${bookcase.id}',
           ),
           body: Padding(
             padding: Constants.pagePadding(context),
             child: ListView.builder(
-              itemCount: 12,
+              itemCount: bookcase.shelvesCount,
               itemBuilder: (context, index) {
                 // final shelf = vm.shelves[index];
                 return Padding(
@@ -49,14 +50,14 @@ class ShelvesView extends StatelessWidget {
                         TextSpan(
                           text: 'Shelve ${index + 1}',
                           style: context.textTheme.titleMedium,
-                          children: [
-                            TextSpan(
-                              text: ' (10 books)',
-                              style: context.textTheme.bodyMedium?.copyWith(
-                                color: context.colorScheme.onSurfaceVariant,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
+                          children: const [
+                            // TextSpan(
+                            //   text: ' (10 books)',
+                            //   style: context.textTheme.bodyMedium?.copyWith(
+                            //     color: context.colorScheme.onSurfaceVariant,
+                            //     fontWeight: FontWeight.normal,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

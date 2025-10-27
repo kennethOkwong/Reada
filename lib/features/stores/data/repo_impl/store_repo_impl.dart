@@ -1,7 +1,7 @@
 import 'package:reada/app/result.dart';
 import 'package:reada/features/stores/data/data_source/store_data_source.dart';
-import 'package:reada/features/stores/data/dtos/add_store_request_dto.dart';
-import 'package:reada/features/stores/data/dtos/bookcase_dto.dart';
+import 'package:reada/features/stores/data/dtos/request_dtos/add_bookcase_request_dto.dart';
+import 'package:reada/features/stores/data/dtos/request_dtos/add_store_request_dto.dart';
 import 'package:reada/features/stores/domain/entities/book_entity.dart';
 import 'package:reada/features/stores/domain/entities/bookcase_entity.dart';
 import 'package:reada/features/stores/domain/entities/shelf_entity.dart';
@@ -28,13 +28,18 @@ class StoreRepositoryImpl implements StoreRepository {
   }
 
   @override
-  Future<Success<BookcaseDto>> addBookcase({required BookcaseDto data}) async {
-    return await storeDataSource.addBookcase(data: data);
+  Future<Success<Bookcase>> addBookcase(
+      {required AddBookcaseRequestDto requestData}) async {
+    final response =
+        await storeDataSource.addBookcase(requestData: requestData);
+    final domain = response.data!.toDomain();
+    return Success(data: domain);
   }
 
   @override
-  Future<Success<List<Bookcase>>> getBookcases(
-      {required String storeId}) async {
+  Future<Success<List<Bookcase>>> getBookcases({
+    required int storeId,
+  }) async {
     final response = await storeDataSource.getBookcases(storeId: storeId);
     final domain = response.data!.map((dto) => dto.toDomain()).toList();
     return Success(data: domain);

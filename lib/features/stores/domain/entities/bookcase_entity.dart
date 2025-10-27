@@ -1,6 +1,6 @@
 class Bookcase {
   final int id;
-  final String storeId;
+  final int storeId;
   final String title;
   final int shelvesCount;
 

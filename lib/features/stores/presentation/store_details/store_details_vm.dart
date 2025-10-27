@@ -5,17 +5,18 @@ import 'package:reada/features/stores/domain/usecase/store_usecase.dart';
 import 'package:reada/features/stores/presentation/stores_list/stores_event.dart';
 
 class StoreDetailsViewmodel extends BaseViewModel<StoreEvent, void> {
-  Store? selectedStore;
+  late Store selectedStore;
   List<Bookcase> bookcases = [];
 
   void init(Store store) {
     selectedStore = store;
+    getBookcases();
   }
 
   // Fetch all bookcases in a store
-  Future<void> getBookcases(String storeId) async {
+  Future<void> getBookcases() async {
     setLoading();
-    final result = await getBookcasesUseCase.call(storeId);
+    final result = await getBookcasesUseCase.call(selectedStore.id);
     setIdle();
 
     result.when(

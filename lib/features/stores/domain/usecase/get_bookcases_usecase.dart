@@ -9,7 +9,7 @@ class GetBookcasesUseCase {
 
   GetBookcasesUseCase(this.repository);
 
-  Future<Result<List<Bookcase>>> call(String storeId) async {
+  Future<Result<List<Bookcase>>> call(int storeId) async {
     try {
       final response = await repository.getBookcases(storeId: storeId);
       return Success(data: response.data);

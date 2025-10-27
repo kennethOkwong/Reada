@@ -1,5 +1,6 @@
 import 'package:reada/app/result.dart';
-import 'package:reada/features/stores/data/dtos/add_store_request_dto.dart';
+import 'package:reada/features/stores/data/dtos/request_dtos/add_bookcase_request_dto.dart';
+import 'package:reada/features/stores/data/dtos/request_dtos/add_store_request_dto.dart';
 import 'package:reada/features/stores/data/dtos/book_dto.dart';
 import 'package:reada/features/stores/data/dtos/bookcase_dto.dart';
 import 'package:reada/features/stores/data/dtos/shelf_dto.dart';
@@ -13,10 +14,11 @@ abstract class StoreDataSource {
   Future<Success<List<StoreDto>>> getStores();
 
   /// Add a new bookcase to a store
-  Future<Success<BookcaseDto>> addBookcase({required BookcaseDto data});
+  Future<Success<BookcaseDto>> addBookcase(
+      {required AddBookcaseRequestDto requestData});
 
   /// Fetch all bookcases in a specific store
-  Future<Success<List<BookcaseDto>>> getBookcases({required String storeId});
+  Future<Success<List<BookcaseDto>>> getBookcases({required int storeId});
 
   /// Fetch all shelves within a specific bookcase
   Future<Success<List<ShelfDto>>> getShelves({required String bookcaseId});
